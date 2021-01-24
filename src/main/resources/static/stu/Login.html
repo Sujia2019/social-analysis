@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>用户登录</title>
+</head>
+<link rel="stylesheet" type="text/css" href="http://unpkg.com/iview/dist/styles/iview.css">
+<script type="text/javascript" src="http://vuejs.org/js/vue.min.js"></script>
+<script type="text/javascript" src="http://unpkg.com/iview/dist/iview.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../res/css/stu-login.css">
+<body>
+    <div id="app">
+        <i-layout style="text-align: center;">
+            <i-header>
+                Welcome!
+            </i-header>
+            <i-content>
+                <div class="content">
+                    <div class="back">
+                        <img src="../res/img/cute.png" style="border-radius: 50%;width: 70px;height: 70px;margin-top: 40px;">
+                        <i-form ref="formInline" :model="formInline" :rules="ruleInline" class="show">
+                            <Form-item prop="user">
+                                Username
+                                <i-input type="text" v-model="formInline.user" placeholder="Username">
+                                    <Icon type="ios-person-outline" slot="prepend"></Icon>
+                                </i-input>
+                            </Form-item>
+                            <Form-item prop="password">
+                                Password
+                                <i-input type="password" v-model="formInline.password" placeholder="Password">
+                                    <Icon type="ios-lock-outline" slot="prepend"></Icon>
+                                </i-input>
+                            </Form-item>
+                            <Form-item>
+                                <i-button type="primary" @click="handleSubmit('formInline')">Signin</i-button>
+                                <i-button type="primary" style="margin-left: 30px;">Register</i-button>
+                            </Form-item>
+                        </i-form>
+                    </div>
+                </div>
+            </i-content>
+            <i-footer style="text-align: center;">
+                Create By Su jia. 2020.9.6
+            </i-footer>
+        </i-layout>
+
+    </div>
+</body>
+<script>
+    var Main ={
+        data () {
+            return {
+                value2:0,
+                formInline: {
+                    user: '',
+                    password: ''
+                },
+                ruleInline: {
+                    user: [
+                        { required: true, message: 'Please fill in the user name', trigger: 'blur' }
+                    ],
+                    password: [
+                        { required: true, message: 'Please fill in the password.', trigger: 'blur' },
+                        { type: 'string', min: 6, message: 'The password length cannot be less than 6 bits', trigger: 'blur' }
+                    ]
+                }
+            }
+        },
+        methods: {
+            handleSubmit(name) {
+                this.$refs[name].validate((valid) => {
+                    if (valid) {
+                        this.$Message.success('Success!');
+                    } else {
+                        this.$Message.error('Fail!');
+                    }
+                })
+            }
+        }
+    }
+    var Component = Vue.extend(Main);
+    new Component().$mount('#app');
+</script>
+
+</html>
