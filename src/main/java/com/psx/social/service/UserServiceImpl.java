@@ -182,11 +182,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserInfo getPrivateInfo(String account) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUser_account(account);
+        userInfo.setPhone(Constants.PRIVATE);
+        userInfo.setEmail(Constants.PRIVATE);
+        userInfo.setCollage(Constants.PRIVATE);
+        userInfo.setBirth(Constants.PRIVATE);
+        userInfo.setGender(-1);
+        userInfo.setMajor(Constants.PRIVATE);
+        userInfo.setSage(-1);
+        userInfo.setSname(Constants.PRIVATE);
+        return userInfo;
+    }
+
+    @Override
     public UserMore findUserBoard(String account) {
         return userMoreMapper.findByAccount(account);
     }
 
-    private UserBase turnToMD5(UserBase userBase){
+    private UserBase turnToMD5(UserBase userBase) {
         userBase.setUser_pwd(DigestUtils.md5Hex(userBase.getUser_pwd()));
         return userBase;
     }

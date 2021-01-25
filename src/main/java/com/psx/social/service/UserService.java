@@ -17,15 +17,24 @@ public interface UserService {
     List<UserInfo> findUsersByAge(int age);
     List<UserInfo> findUsersByCollage(String collage);
     List<UserInfo> findUsersByMajor(String major);
+
     List<UserInfo> findUsersInfoByLikeQuery(UserInfo userInfo);
+
     UserInfo findUserByAccount(String account);
+
     boolean updateUser(UserInfo user);
 
     // 查找一个用户的扩展信息
     UserMore findUserBoard(String account);
+
     // 计算分数
     UserMore addScores(String account, List<ReturnAnswer> list);
+
     ResultMsg returnResult(String account);
+
     boolean isFinished(String account);
+
+    // 隐藏的信息
+    UserInfo getPrivateInfo(String account);
 
 }
