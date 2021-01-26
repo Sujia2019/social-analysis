@@ -79,14 +79,22 @@ public class UserServiceImpl implements UserService {
          UserMore userMore = new UserMore();
          userMore.setUser_account(user.getUser_account());
          userMore.setIsFinishedQ(false);
-         userMore.setMsgCount(0);
-         userMore.setRequestCount(0);
-         userMore.setScores(0);
-         userMoreMapper.insert(userMore);
+        userMore.setMsgCount(0);
+        userMore.setRequestCount(0);
+        userMore.setScores(0);
+        userMoreMapper.insert(userMore);
         // 1 MD5加密
         // 2 如果账号为空，说明此人用手机号或者邮箱注册的，账号按当前时间设置
         // 3 初始化基本信息，设置等
-        return new ReturnT<>(Constants.SUCCESS,"注册成功",user);
+        return new ReturnT<>(Constants.SUCCESS, "注册成功", user);
+    }
+
+    @Override
+    public ReturnT<?> doChangePwd(UserBase userBase) {
+        // 最好前端base64编码 后端解码 再转md5
+        turnToMD5(userBase);
+        userBaseMapper.updatePwd(userBase);
+        return new ReturnT<>(Constants.SUCCESS, "修改成功");
     }
 
     @Override

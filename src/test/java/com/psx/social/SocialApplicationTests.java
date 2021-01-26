@@ -5,6 +5,7 @@ import com.psx.social.dao.UserBaseMapper;
 import com.psx.social.entity.FriendRequest;
 import com.psx.social.entity.UserBase;
 import com.psx.social.service.UserService;
+import com.psx.social.util.Verify;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +17,18 @@ class SocialApplicationTests {
     @Test
     void contextLoads() {
     }
+
     @Autowired
     UserBaseMapper baseMapper;
     @Autowired
     FriendMapper friendMapper;
     @Autowired
     UserService userService;
+    @Autowired
+    Verify verify;
 
     @Test
-    public void doLogin(){
+    public void doLogin() {
         UserBase userBase = new UserBase();
         userBase.setAuth(false);
         userBase.setPhone("18539403150");
@@ -60,7 +64,12 @@ class SocialApplicationTests {
     }
 
     @Test
-    public void delete(){
+    public void delete() {
         userService.delUser("2");
+    }
+
+    @Test
+    public void verifyCode() {
+        verify.sendCode("18539403150");
     }
 }

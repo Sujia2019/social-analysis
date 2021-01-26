@@ -19,6 +19,10 @@ public interface UserBaseMapper {
             "where user_account=#{user_account}")
     public int update(UserBase userBase);
 
+    @Update("update psx_db.UserBase SET " +
+            "user_pwd = #{user_pwd} where phone=#{phone}")
+    public int updatePwd(UserBase userBase);
+
 
     @Delete("delete from psx_db.UserBase where user_account=#{account}")
     public int delete(String account);
