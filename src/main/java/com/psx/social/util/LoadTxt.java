@@ -11,7 +11,6 @@ import java.util.List;
 public class LoadTxt {
 
     public static List<Question> ReadQuestions(String url){
-//        File f  = new File(url);
         List<Question> questions = new ArrayList<>();
         try {
             ClassPathResource classPathResource = new ClassPathResource(url);
@@ -42,8 +41,6 @@ public class LoadTxt {
                     list.add(a);
                 }
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -51,18 +48,11 @@ public class LoadTxt {
     }
 
     public static String sendResult(String scores) {
-//        File f = null;
         String res = "";
-//        ClassPathResource resource = new ClassPathResource();
         try {
-
-//            f = ResourceUtils.getFile("classpath:Questions/Research_2_Res");
-//        File f  = new File("classpath:Questions/Research_2_Res");
-            ClassPathResource classPathResource = new ClassPathResource("classpath:Questions/Research_2_Res");
+            ClassPathResource classPathResource = new ClassPathResource("classpath:questions/Research_2_Res");
             InputStream in = classPathResource.getInputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
-
-//            BufferedReader br = new BufferedReader(new FileReader(f));
             String str;
             while ((str=br.readLine())!=null){
                 if(str.equals(scores)){

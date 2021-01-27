@@ -1,5 +1,6 @@
 package com.psx.social.websocket;
 
+import com.psx.social.entity.UserDTO;
 import com.psx.social.entity.UserInfo;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -21,11 +22,11 @@ public class SpringWebSocketHandlerInterceptor extends HttpSessionHandshakeInter
             HttpSession session = servletRequest.getServletRequest().getSession(false);
             if (session != null) {
                 //使用userName区分WebSocketHandler，以便定向发送消息
-                String userSno = ((UserInfo) session.getAttribute("user")).getSname();
-                if (userSno==null) {
-                    userSno="default-system";
+                String userName = ((UserDTO) session.getAttribute("user")).getUserInfo().getSname();
+                if (userName == null) {
+                    userName = "default-system";
                 }
-                attributes.put("WEBSOCKET_USERNAME",userSno);
+                attributes.put("WEBSOCKET_USERNAME", userName);
             }
         }
         return super.beforeHandshake(request, response, wsHandler, attributes);

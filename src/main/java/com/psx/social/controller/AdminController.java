@@ -6,6 +6,7 @@ import com.psx.social.entity.AnalyzingData;
 import com.psx.social.entity.UserInfo;
 import com.psx.social.service.QuestionService;
 import com.psx.social.service.UserService;
+import com.psx.social.util.ChatListener;
 import com.psx.social.util.Constants;
 import com.psx.social.util.PageUtil;
 import com.psx.social.util.ReturnT;
@@ -98,9 +99,20 @@ public class AdminController {
     @ResponseBody
     public ReturnT<?> finishedPercent() {
         AnalyzingData data = questionService.analyzingRes();
-        LOGGER.info("答题情况：{}",data.toString());
-        return new ReturnT<>(Constants.SUCCESS,"查询答题完成情况成功",data);
+        LOGGER.info("答题情况：{}", data.toString());
+        return new ReturnT<>(Constants.SUCCESS, "查询答题完成情况成功", data);
+    }
 
+    @RequestMapping(value = "getChatLogsName", method = RequestMethod.GET)
+    @ResponseBody
+    public ReturnT<?> getChatLogsName() {
+        return new ReturnT<>(Constants.SUCCESS, ChatListener.getLogsName());
+    }
+
+    @RequestMapping(value = "getChatLog", method = RequestMethod.GET)
+    @ResponseBody
+    public ReturnT<?> getChatLog(@RequestParam String fileName) {
+        return new ReturnT<>(Constants.SUCCESS, ChatListener.getLog(fileName));
     }
 
 }

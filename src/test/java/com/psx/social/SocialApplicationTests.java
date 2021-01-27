@@ -8,11 +8,14 @@ import com.psx.social.service.UserService;
 import com.psx.social.util.Verify;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class SocialApplicationTests {
+    private static final Logger LOGGER = LoggerFactory.getLogger("ChatRoom");
 
     @Test
     void contextLoads() {
@@ -71,5 +74,10 @@ class SocialApplicationTests {
     @Test
     public void verifyCode() {
         verify.sendCode("18539403150");
+    }
+
+    @Test
+    public void log() {
+        LOGGER.info("聊天记录，来自【{}】,内容：{}", "xxx", "xxx");
     }
 }

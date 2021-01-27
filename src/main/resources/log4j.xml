@@ -3,16 +3,41 @@
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" threshold="null" debug="null">
 
 	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
-		<param name="Target" value="System.out" />
+		<param name="Target" value="System.out"/>
 		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%-d{yyyy-MM-dd HH:mm:ss} xxl-rpc-sample-frameless-server [%c]-[%t]-[%M]-[%L]-[%p] %m%n" />
+			<param name="ConversionPattern"
+				   value="%-d{yyyy-MM-dd HH:mm:ss} xxl-rpc-sample-frameless-server [%c]-[%t]-[%M]-[%L]-[%p] %m%n"/>
 		</layout>
 	</appender>
-	
-    <root>
-        <level value="INFO" />
-        <appender-ref ref="CONSOLE" />
-    </root>
+
+
+	<appender name="ChatRoom" class="com.zlz.utils.DatedFileAppender">
+		<param name="Encoding" value="UTF-8"/>
+		<!-- 事件日志文件存放在目录下 -->
+		<param name="File" value="E:/Project/social-analysis/src/main/resources/logs/chat.log"/>
+		<!-- 重启后追加到旧文件 -->
+		<param name="Append" value="true"/>
+		<!-- 按天分割文件 -->
+		<param name="DatePattern" value=".yyyy-MM-dd"/>
+		<!-- 配置日志格式 -->
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%c %d [%t] %p -- %m%n"/>
+		</layout>
+		<!-- 配置过滤器，此文件只输出INFO信息 -->
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="TRACE"/>
+			<param name="LevelMax" value="TRACE"/>
+		</filter>
+	</appender>
+
+	<logger name="com.psx.social.websocket.SpringWebSocketHandler" additivity="true">
+		<level value="INFO"/>
+		<appender-ref ref="ChatRoom"/>
+	</logger>
+	<root>
+		<level value="INFO"/>
+		<appender-ref ref="CONSOLE"/>
+	</root>
 
 
 </log4j:configuration>

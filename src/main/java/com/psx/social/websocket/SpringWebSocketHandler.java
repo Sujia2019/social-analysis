@@ -32,6 +32,7 @@ public class SpringWebSocketHandler extends TextWebSocketHandler{
         users.add(session);
         String username= (String) session.getAttributes().get("WEBSOCKET_USERNAME");
         //这块会实现自己业务，比如，当用户登录后，会把离线消息推送给用户
+        logger.info("欢迎【{}】进入多人聊天室！当前人数：{}", username, users.size());
         TextMessage returnMessage = new TextMessage("欢迎"+username+"进入多人聊天室！当前人数："+users.size());
         sendMessageToUsers(returnMessage);
     }
@@ -40,9 +41,9 @@ public class SpringWebSocketHandler extends TextWebSocketHandler{
      * 关闭连接时触发
      */
     public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
-        logger.debug("websocket connection closed......");
         String username= (String) session.getAttributes().get("WEBSOCKET_USERNAME");
-        sendMessageToUsers(new TextMessage("用户"+username+"已退出！"));
+        logger.info("用户【{}】已退出！", username);
+        sendMessageToUsers(new TextMessage("用户" + username + "已退出！"));
         users.remove(session);
         logger.info("剩余在线用户"+users.size());
     }
@@ -98,7 +99,6 @@ public class SpringWebSocketHandler extends TextWebSocketHandler{
         for (WebSocketSession user : users) {
             try {
                 if (user.isOpen()) {
-
                     user.sendMessage(message);
                 }
             } catch (IOException e) {
