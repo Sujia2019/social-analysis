@@ -2,16 +2,27 @@
     width: 250px;
     margin: 40px;
 }
-.back{
+.back {
     margin-right: 100px;
     margin-top: 100px;
     float: right;
-    width: 350;
+    width: 350px;
     height: auto;
     background-color: ivory;
     border-radius: 10%;
 }
-.content{
+
+.backRegistry {
+    margin-right: 100px;
+    margin-top: 80px;
+    float: right;
+    width: 350px;
+    height: auto;
+    background-color: ivory;
+    border-radius: 9%;
+}
+
+.content {
     background-image: url("../img/stu.jpg");
     background-attachment: fixed;
     background-repeat: no-repeat;

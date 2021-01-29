@@ -10,6 +10,8 @@ public interface UserService {
     public UserDTO doLogin(UserBase user);
     public ReturnT<?> doRegistry(UserBase user);
 
+    public boolean hasAccount(String account);
+
     public ReturnT<?> doChangePwd(UserBase userBase);
 
     boolean delUser(String account);

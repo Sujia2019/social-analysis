@@ -55,5 +55,8 @@ public interface UserBaseMapper {
     public UserBase findByEmail(String email);
 
     @Update("update UserBase set user_pwd=#{pwd} where user_account=account")
-    int updateUserPwd(String account,String pwd);
+    int updateUserPwd(String account, String pwd);
+
+    @Select("select count(*) from userBase where user_account=#{account}")
+    int checkAccount(String account);
 }

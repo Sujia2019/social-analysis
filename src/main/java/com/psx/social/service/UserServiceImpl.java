@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -30,8 +31,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO doLogin(UserBase user) {
+        String account0 = user.getUser_account();
+        if (isMobilePhone(account0)) {
+            user.setUser_account(null);
+            user.setPhone(account0);
+        } else if (isEmail(account0)) {
+            user.setUser_account(null);
+            user.setEmail(account0);
+        }
         UserBase userBase = userBaseMapper.findByAccountAndPwd(turnToMD5(user));
-        if (userBase != null){
+        if (userBase != null) {
             String account = userBase.getUser_account();
             UserDTO userDTO = new UserDTO();
             userDTO.setUser_account(account);
@@ -87,6 +96,11 @@ public class UserServiceImpl implements UserService {
         // 2 如果账号为空，说明此人用手机号或者邮箱注册的，账号按当前时间设置
         // 3 初始化基本信息，设置等
         return new ReturnT<>(Constants.SUCCESS, "注册成功", user);
+    }
+
+    @Override
+    public boolean hasAccount(String account) {
+        return userBaseMapper.checkAccount(account) == 0;
     }
 
     @Override
@@ -214,4 +228,13 @@ public class UserServiceImpl implements UserService {
         return userBase;
     }
 
+    private boolean isMobilePhone(String input) {
+        String reg = "^(((13[0-9])|(15([0-3]|[5-9]))|(18[0,5-9]))\\d{8})|(0\\d{2}-\\d{8})|(0\\d{3}-\\d{7})$";
+        return Pattern.matches(reg, input);
+    }
+
+    private boolean isEmail(String input) {
+        String reg = "^([a-z0-9A-Z]+[-|_|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+        return Pattern.matches(reg, input);
+    }
 }

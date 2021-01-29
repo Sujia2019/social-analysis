@@ -47,7 +47,7 @@ public class IndexController {
                 returnT = new ReturnT<>(Constants.SUCCESS, Constants.SUCCESS_MSG, userDTO);
                 session.setAttribute("user", returnT);
             } else {
-                returnT = new ReturnT<>(Constants.FAIL, "用户名或密码错误，登录失败");
+                returnT = new ReturnT<>(Constants.FAIL, "账号或密码错误，登录失败");
             }
         }
         return returnT;
@@ -81,5 +81,14 @@ public class IndexController {
     @ResponseBody
     public ReturnT<?> verifyCode(@RequestBody UserBase userBase) {
         return userService.doChangePwd(userBase);
+    }
+
+    @RequestMapping(value = "checkAccount", method = RequestMethod.POST)
+    @ResponseBody
+    public ReturnT<?> verifyAccount(@RequestBody String account) {
+        if (userService.hasAccount(account)) {
+            return new ReturnT<>(Constants.FAIL, "此账号已存在");
+        }
+        return new ReturnT<>(Constants.SUCCESS, "恭喜，此账号可以使用");
     }
 }
