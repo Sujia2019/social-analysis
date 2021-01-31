@@ -57,7 +57,8 @@
         user_account: '',
         user_pwd: '',
         phone: '',
-        email: ''
+        email: '',
+        auth: false
     };
 
     var Main = {
@@ -169,6 +170,17 @@
                 this.$refs[name].validate((valid) => {
                     if (valid) {
                         this.$Message.success('Success!');
+                        $.ajax({
+                            url: '/stu/doRegistry',
+                            type: 'post',
+                            contentType: "application/json;charset=UTF-8",
+                            data: JSON.stringify(this.userBase),
+                            success(res) {
+                                alert("注册成功！");
+                                console.log(res);
+                                window.location.href = './MoreInfo.html'
+                            }
+                        })
                     } else {
                         this.$Message.error('Fail!');
                     }

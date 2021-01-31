@@ -1,16 +1,20 @@
 package com.psx.social.controller;
 import com.psx.social.entity.UserBase;
 import com.psx.social.entity.UserDTO;
+import com.psx.social.entity.UserInfo;
 import com.psx.social.service.BoardService;
 import com.psx.social.service.FriendService;
 import com.psx.social.service.SettingService;
 import com.psx.social.service.UserService;
 import com.psx.social.util.Constants;
 import com.psx.social.util.ReturnT;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 
 @RestController
@@ -24,6 +28,7 @@ public class StudentController {
     BoardService boardService;
     @Autowired
     FriendService friendService;
+    private static final Logger LOGGER = LoggerFactory.getLogger(StudentController.class);
 
     // 学生注册
     @RequestMapping(value = "doRegistry", method = RequestMethod.POST)
@@ -52,6 +57,26 @@ public class StudentController {
             // 非好友关系
             return new ReturnT<>(Constants.SUCCESS, userService.getPrivateInfo(account));
         }
+    }
+
+    @RequestMapping(value = "update")
+    @ResponseBody
+    public ReturnT<?> updateInfo(@RequestBody UserInfo userInfo, HttpServletRequest request) {
+        userService.updateUser(userInfo);
+        System.out.println(userInfo.toString());
+        HttpSession session = request.getSession();
+        session.removeAttribute("user");
+        session.setAttribute("user", userService.findUsersByAccount(userInfo.getUser_account()));
+        return new ReturnT<>(Constants.SUCCESS, Constants.SUCCESS_MSG);
+    }
+
+    @RequestMapping("search")
+    @ResponseBody
+    public ReturnT<?> search(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        UserDTO userDto = (UserDTO) session.getAttribute("user");
+        LOGGER.info("【查询用户session信息】{}", userDto);
+        return new ReturnT<>(Constants.SUCCESS, Constants.SUCCESS_MSG, userDto);
     }
 
 }
