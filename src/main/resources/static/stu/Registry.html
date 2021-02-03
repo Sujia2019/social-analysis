@@ -87,7 +87,7 @@
                 if (!value) {
                     return callback(new Error('请正确输入账号格式'));
                 }
-                const reg = /^\d{6,12}$/;
+                const reg = /^{6,12}$/;
                 const reg2 = /^[0-9]+$/;
                 const reg3 = /[@]/im;
                 if (!reg.test(value)) {

@@ -1,7 +1,9 @@
 package com.psx.social.entity;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
+@ApiModel("设置")
 @Data
 public class Settings {
     private int id;

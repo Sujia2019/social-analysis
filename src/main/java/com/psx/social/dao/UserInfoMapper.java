@@ -18,9 +18,10 @@ public interface UserInfoMapper {
 
     @Select("select * from UserInfo")
     List<UserInfo> findAll();
-    @Select("select * from UserInfo where user_account=#{account}")
+    @Select("select * from UserInfo where user_account like concat('%',#{user_account},'%')")
     List<UserInfo> findUsersByAccount(String account);
-    @Select("select * from UserInfo where sname=#{sname}")
+
+    @Select("select * from UserInfo where sname concat('%',#{sname},'%')")
     List<UserInfo> findUsersByName(String name);
     @Select("select * from UserInfo where sage=#{age}")
     List<UserInfo> findUsersByAge(int age);

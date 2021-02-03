@@ -1,10 +1,11 @@
 package com.psx.social.entity;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.util.Date;
 
-
+@ApiModel("答题页")
 @Data
 public class QuestionPage {
     private int id;

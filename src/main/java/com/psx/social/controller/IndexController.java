@@ -8,6 +8,8 @@ import com.psx.social.service.UserService;
 import com.psx.social.util.Constants;
 import com.psx.social.util.ReturnT;
 import com.psx.social.util.Verify;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+@Api("登录首页")
 @RestController
 @RequestMapping("/")
 public class IndexController {
@@ -29,6 +32,7 @@ public class IndexController {
     Verify verify;
 
     // 通用登录
+    @ApiOperation("通用登录")
     @RequestMapping(value = "doLogin", method = RequestMethod.POST)
     @ResponseBody
     public ReturnT<?> doLogin(@RequestBody(required = false) UserBase userBase, HttpServletRequest request) {
@@ -53,6 +57,7 @@ public class IndexController {
         return returnT;
     }
 
+    @ApiOperation("发送验证码")
     @RequestMapping(value = "sendCode", method = RequestMethod.GET)
     @ResponseBody
     public ReturnT<?> sendCode(@RequestParam String phone) {
@@ -62,6 +67,7 @@ public class IndexController {
         return new ReturnT<>(Constants.SUCCESS, "发送成功");
     }
 
+    @ApiOperation("验证验证码")
     @RequestMapping(value = "verify", method = RequestMethod.POST)
     @ResponseBody
     public ReturnT<?> verifyCode(@RequestBody VerifyCode verifyCode) {
@@ -77,12 +83,14 @@ public class IndexController {
         }
     }
 
+    @ApiOperation("修改密码")
     @RequestMapping(value = "changePwd", method = RequestMethod.POST)
     @ResponseBody
     public ReturnT<?> verifyCode(@RequestBody UserBase userBase) {
         return userService.doChangePwd(userBase);
     }
 
+    @ApiOperation("检查是否有此账号")
     @RequestMapping(value = "checkAccount", method = RequestMethod.POST)
     @ResponseBody
     public ReturnT<?> verifyAccount(@RequestBody String account) {

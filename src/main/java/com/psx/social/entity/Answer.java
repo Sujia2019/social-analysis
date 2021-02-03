@@ -1,8 +1,10 @@
 package com.psx.social.entity;
 
 
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
+@ApiModel("答案")
 @Data
 public class Answer {
 

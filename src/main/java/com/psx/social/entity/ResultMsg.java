@@ -1,8 +1,10 @@
 package com.psx.social.entity;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 // 答题结果返回
+@ApiModel("答题结果返回")
 @Data
 public class ResultMsg {
     private String rate;// 评级

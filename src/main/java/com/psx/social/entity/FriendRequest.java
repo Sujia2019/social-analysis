@@ -1,8 +1,10 @@
 package com.psx.social.entity;
 
 
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
+@ApiModel("好友申请")
 @Data
 public class FriendRequest {
     private String account1;

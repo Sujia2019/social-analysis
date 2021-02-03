@@ -8,6 +8,8 @@ import com.psx.social.service.SettingService;
 import com.psx.social.service.UserService;
 import com.psx.social.util.Constants;
 import com.psx.social.util.ReturnT;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 
+@Api("留言板")
 @RestController
 @RequestMapping("/board")
 public class BoardController {
@@ -27,6 +30,7 @@ public class BoardController {
     @Autowired
     FriendService friendService;
 
+    @ApiOperation("根据账号展示一个人的留言板")
     @RequestMapping(value = "showBoardMsg", method = RequestMethod.GET)
     @ResponseBody
     public ReturnT<?> showBoard(@RequestParam(required = false) String account,
@@ -49,14 +53,15 @@ public class BoardController {
         }
     }
 
-    @RequestMapping(value="addBoardMsg")
+    @ApiOperation("给某人留言")
+    @RequestMapping(value = "addBoardMsg", method = RequestMethod.POST)
     @ResponseBody
-    public ReturnT<?> addNewBoardMsg(@RequestBody BoardMsg msg){
+    public ReturnT<?> addNewBoardMsg(@RequestBody BoardMsg msg) {
         boolean isOk = boardService.addBoardMsg(msg);
-        if (isOk){
-            return new ReturnT<>(Constants.SUCCESS,"发送留言成功");
+        if (isOk) {
+            return new ReturnT<>(Constants.SUCCESS, "发送留言成功");
         }
-        return new ReturnT<>(Constants.FAIL,"对方设置了留言权限，陌生人暂时无法留言");
+        return new ReturnT<>(Constants.FAIL, "对方设置了留言权限，陌生人暂时无法留言");
     }
 
 }

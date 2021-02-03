@@ -1,7 +1,9 @@
 package com.psx.social.entity;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
+@ApiModel("用户登录基本信息")
 @Data
 public class UserBase {
     private int id;

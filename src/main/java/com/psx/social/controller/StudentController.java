@@ -8,6 +8,8 @@ import com.psx.social.service.SettingService;
 import com.psx.social.service.UserService;
 import com.psx.social.util.Constants;
 import com.psx.social.util.ReturnT;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-
+@Api("学生端")
 @RestController
 @RequestMapping("/stu")
 public class StudentController {
@@ -31,12 +33,14 @@ public class StudentController {
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentController.class);
 
     // 学生注册
+    @ApiOperation("学生注册")
     @RequestMapping(value = "doRegistry", method = RequestMethod.POST)
     @ResponseBody
     public ReturnT<?> doRegistry(@RequestBody UserBase userBase, HttpServletRequest request) {
         return userService.doRegistry(userBase);
     }
 
+    @ApiOperation("根据账号展示个人信息")
     @RequestMapping(value = "showInfo", method = RequestMethod.GET)
     @ResponseBody
     public ReturnT<?> showInfo(@RequestParam(required = false) String account,
@@ -59,7 +63,8 @@ public class StudentController {
         }
     }
 
-    @RequestMapping(value = "update")
+    @ApiOperation("更新用户信息")
+    @RequestMapping(value = "update", method = RequestMethod.POST)
     @ResponseBody
     public ReturnT<?> updateInfo(@RequestBody UserInfo userInfo, HttpServletRequest request) {
         userService.updateUser(userInfo);
@@ -70,7 +75,8 @@ public class StudentController {
         return new ReturnT<>(Constants.SUCCESS, Constants.SUCCESS_MSG);
     }
 
-    @RequestMapping("search")
+    @ApiOperation("获取登录用户的信息")
+    @RequestMapping(value = "search", method = RequestMethod.GET)
     @ResponseBody
     public ReturnT<?> search(HttpServletRequest request) {
         HttpSession session = request.getSession();
