@@ -45,8 +45,11 @@ public interface UserInfoMapper {
             "            <if test=\"null !=user_account\">" +
             "                and user_account like concat('%',#{user_account},'%')"+
             "            </if>" +
-            "            <if test=\"null !=user_account\">" +
+            "            <if test=\"null !=sname\">" +
             "                and sname like concat('%',#{sname},'%')"+
+            "            </if>" +
+            "            <if test=\"null != sage\">" +
+            "                and sage like concat('%',#{sage},'%')" +
             "            </if>" +
             "            <if test=\"null !=phone\">" +
             "                and phone like concat('%',#{phone},'%')"+
@@ -54,11 +57,14 @@ public interface UserInfoMapper {
             "            <if test=\"null !=email\">" +
             "                and email like concat('%',#{email},'%')"+
             "            </if>" +
-            "            <if test=\"null !=email\">" +
+            "            <if test=\"null !=major\">" +
             "                and major like concat('%',#{major},'%')"+
             "            </if>" +
-            "            <if test=\"null !=email\">" +
+            "            <if test=\"null !=collage\">" +
             "                and collage like concat('%',#{collage},'%')"+
+            "            </if>" +
+            "            <if test=\"null != null\">" +
+            "                and gender=#{gender}" +
             "            </if>" +
             "        </where>"
             +"</script>")

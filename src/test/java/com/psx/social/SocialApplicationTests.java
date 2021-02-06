@@ -96,4 +96,12 @@ class SocialApplicationTests {
     public void log() {
         LOGGER.info("聊天记录，来自【{}】,内容：{}", "xxx", "xxx");
     }
+
+    @Test
+    public void likeQuery() {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUser_account("sujia");
+        System.out.println(userService.findUsersInfoByLikeQuery(userInfo));
+
+    }
 }

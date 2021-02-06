@@ -45,3 +45,24 @@
 ### 1.29 前端
 * 今天调整了登录和注册的正则以及前端布局，，我的天真的不想写前端。。
 * log存的位置还有问题，现在还是控制台输出，，
+
+
+### 2.6接口信息
+POST /admin/findUsersByLikeQuery?index=0&amp;perPage=5 HTTP/1.1
+Host: 47.93.225.242:8888
+Content-Type: application/json
+Cache-Control: no-cache
+Postman-Token: 75df74a5-36ae-498c-a12b-7848f4876e75
+
+{
+	"id":null,
+	"user_account":"sujia",
+	"sname":null, 
+	"sage":null, 
+	"phone":null, 
+	"email":null, 
+	"collage":null, 
+	"major":null, 
+	"birth":null, 
+	"gender":null
+}

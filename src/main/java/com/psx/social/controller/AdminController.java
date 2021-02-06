@@ -94,6 +94,17 @@ public class AdminController {
         return PageUtil.getPageResult(new PageInfo<>(users));
     }
 
+    @ApiOperation("根据不同条件，模糊查询")
+    @RequestMapping(value = "findUsersByLikeQuery", method = RequestMethod.POST)
+    @ResponseBody
+    public ReturnT<?> findUsersByLikeQuery(@RequestBody UserInfo userInfo,
+                                           @RequestParam(required = false) int index,
+                                           @RequestParam(required = false) int perPage) {
+        PageHelper.startPage(index, perPage);
+        List<UserInfo> users = userService.findUsersInfoByLikeQuery(userInfo);
+        return PageUtil.getPageResult(new PageInfo<>(users));
+    }
+
     @ApiOperation("根据账号删除")
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     @ResponseBody

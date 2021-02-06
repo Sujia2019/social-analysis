@@ -36,7 +36,7 @@ public class StudentController {
     @ApiOperation("学生注册")
     @RequestMapping(value = "doRegistry", method = RequestMethod.POST)
     @ResponseBody
-    public ReturnT<?> doRegistry(@RequestBody UserBase userBase, HttpServletRequest request) {
+    public ReturnT<?> doRegistry(@RequestBody UserBase userBase) {
         return userService.doRegistry(userBase);
     }
 
