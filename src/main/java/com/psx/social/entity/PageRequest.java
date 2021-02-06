@@ -3,9 +3,11 @@ package com.psx.social.entity;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @ApiModel("分页")
 @Data
-public class PageRequest {
+public class PageRequest implements Serializable {
     /**
      * 当前页码
      */

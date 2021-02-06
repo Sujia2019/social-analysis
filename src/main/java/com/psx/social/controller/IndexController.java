@@ -49,7 +49,7 @@ public class IndexController {
             userDTO = userService.doLogin(userBase);
             if (userDTO != null) {
                 returnT = new ReturnT<>(Constants.SUCCESS, Constants.SUCCESS_MSG, userDTO);
-                session.setAttribute("user", returnT);
+                session.setAttribute("user", userDTO);
             } else {
                 returnT = new ReturnT<>(Constants.FAIL, "账号或密码错误，登录失败");
             }

@@ -1,10 +1,14 @@
 package com.psx.social;
 
+import com.psx.social.controller.IndexController;
 import com.psx.social.dao.FriendMapper;
 import com.psx.social.dao.UserBaseMapper;
 import com.psx.social.entity.FriendRequest;
 import com.psx.social.entity.UserBase;
+import com.psx.social.entity.UserDTO;
+import com.psx.social.entity.UserInfo;
 import com.psx.social.service.UserService;
+import com.psx.social.util.ReturnT;
 import com.psx.social.util.Verify;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -29,18 +33,30 @@ class SocialApplicationTests {
     UserService userService;
     @Autowired
     Verify verify;
+    @Autowired
+    IndexController indexController;
 
     @Test
     public void doLogin() {
         UserBase userBase = new UserBase();
         userBase.setAuth(false);
-        userBase.setPhone("18539403150");
-        userBase.setUser_pwd("123456");
-        UserBase res = baseMapper.findByAccountAndPwd(userBase);
+        userBase.setUser_account("test");
+        userBase.setUser_pwd("123");
+        UserDTO res = userService.doLogin(userBase);
         System.out.println(res);
     }
+
     @Test
-    public void registry(){
+    public void loginDTO() {
+        UserBase userBase = new UserBase();
+        userBase.setAuth(false);
+        userBase.setUser_account("test");
+        userBase.setUser_pwd("123");
+        System.out.println(baseMapper.findByAccountAndPwd(userBase));
+    }
+
+    @Test
+    public void registry() {
         UserBase user1 = new UserBase();
         user1.setAuth(false);
         user1.setUser_account("1");
@@ -71,10 +87,10 @@ class SocialApplicationTests {
         userService.delUser("2");
     }
 
-    @Test
-    public void verifyCode() {
-        verify.sendCode("18539403150");
-    }
+//    @Test
+//    public void verifyCode() {
+//        verify.sendCode("18539403150");
+//    }
 
     @Test
     public void log() {

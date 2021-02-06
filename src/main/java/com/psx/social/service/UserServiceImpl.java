@@ -11,10 +11,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.apache.commons.codec.digest.DigestUtils;
-
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.springframework.transaction.annotation.Transactional;
+
+@Transactional
 @Service
 public class UserServiceImpl implements UserService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
@@ -39,9 +41,10 @@ public class UserServiceImpl implements UserService {
             user.setUser_account(null);
             user.setEmail(account0);
         }
-        UserBase userBase = userBaseMapper.findByAccountAndPwd(turnToMD5(user));
-        if (userBase != null) {
-            String account = userBase.getUser_account();
+        user.setUser_pwd(DigestUtils.md5Hex(user.getUser_pwd()));
+        user = userBaseMapper.findByAccountAndPwd(user);
+        if (user != null) {
+            String account = user.getUser_account();
             UserDTO userDTO = new UserDTO();
             userDTO.setUser_account(account);
             userDTO.setUserInfo(userInfoMapper.findUserByAccount(account));
@@ -54,40 +57,40 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ReturnT<?> doRegistry(UserBase user) {
-         String account;
-         turnToMD5(user);
-         if (!Strings.isBlank(user.getUser_account())){
+        String account;
+        turnToMD5(user);
+        if (!Strings.isBlank(user.getUser_account())){
             if(null != userBaseMapper.findByAccount(user.getUser_account()))
                 return new ReturnT<>(Constants.FAIL,"注册失败,该账号已经被注册过");
-         }
-         if (Strings.isBlank(user.getUser_account())){
-             Long create = System.currentTimeMillis();
-             LOGGER.info(">>>>>创建用户时间：{}",create);
-             account = "#"+create+"#";
-             user.setUser_account(account);
-         }
-         // 检查该手机号是否被注册过
-         if (!Strings.isBlank(user.getPhone())){
-             if(null !=userBaseMapper.findByPhone(user.getPhone()))
+        }
+        if (Strings.isBlank(user.getUser_account())){
+            Long create = System.currentTimeMillis();
+            LOGGER.info(">>>>>创建用户时间：{}",create);
+            account = "#"+create+"#";
+            user.setUser_account(account);
+        }
+        // 检查该手机号是否被注册过
+        if (!Strings.isBlank(user.getPhone())){
+            if(null !=userBaseMapper.findByPhone(user.getPhone()))
                 return new ReturnT<>(Constants.FAIL,"注册失败,该手机号已经被注册过");
-         }
-         if (!Strings.isBlank(user.getEmail())){
-             if(null != userBaseMapper.findByEmail(user.getEmail()))
+        }
+        if (!Strings.isBlank(user.getEmail())){
+            if(null != userBaseMapper.findByEmail(user.getEmail()))
                 return new ReturnT<>(Constants.FAIL,"注册失败,该邮箱已经被注册过");
-         }
+        }
 
-         userBaseMapper.insert(user);
-         UserInfo userInfo = new UserInfo();
-         userInfo.setEmail(user.getEmail());
-         userInfo.setPhone(user.getPhone());
-         userInfo.setUser_account(user.getUser_account());
-         userInfoMapper.insert(userInfo);
-         Settings settings = new Settings();
-         settings.setUser_account(user.getUser_account());
-         settingsMapper.insert(settings);
-         UserMore userMore = new UserMore();
-         userMore.setUser_account(user.getUser_account());
-         userMore.setIsFinishedQ(false);
+        userBaseMapper.insert(user);
+        UserInfo userInfo = new UserInfo();
+        userInfo.setEmail(user.getEmail());
+        userInfo.setPhone(user.getPhone());
+        userInfo.setUser_account(user.getUser_account());
+        userInfoMapper.insert(userInfo);
+        Settings settings = new Settings();
+        settings.setUser_account(user.getUser_account());
+        settingsMapper.insert(settings);
+        UserMore userMore = new UserMore();
+        userMore.setUser_account(user.getUser_account());
+        userMore.setIsFinishedQ(false);
         userMore.setMsgCount(0);
         userMore.setRequestCount(0);
         userMore.setScores(0);

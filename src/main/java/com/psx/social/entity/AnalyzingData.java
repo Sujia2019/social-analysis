@@ -3,9 +3,11 @@ package com.psx.social.entity;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @ApiModel("分析结果")
 @Data
-public class AnalyzingData {
+public class AnalyzingData implements Serializable {
     private int allCount;
     private double percent;
     private int finishedCount;

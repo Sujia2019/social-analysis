@@ -4,11 +4,13 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @ApiModel("返回类型")
 @Data
-public class ReturnT<T> {
-    public static ReturnT<String> successReturn = new ReturnT<>(Constants.SUCCESS,Constants.SUCCESS_MSG);
-    public static ReturnT<String> errorReturn = new ReturnT<>(Constants.FAIL,Constants.FAIL_MSG);
+public class ReturnT<T> implements Serializable {
+    public static ReturnT<String> successReturn = new ReturnT<>(Constants.SUCCESS, Constants.SUCCESS_MSG);
+    public static ReturnT<String> errorReturn = new ReturnT<>(Constants.FAIL, Constants.FAIL_MSG);
     @ApiModelProperty("返回信息")
     private String message;
     @ApiModelProperty("返回结果对象")
