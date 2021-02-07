@@ -20,24 +20,24 @@
 		<!-- 按天分割文件 -->
 		<param name="DatePattern" value=".yyyy-MM-dd"/>
 		<!-- 配置日志格式 -->
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%c %d [%t] %p -- %m%n"/>
-		</layout>
-		<!-- 配置过滤器，此文件只输出INFO信息 -->
-		<filter class="org.apache.log4j.varia.LevelRangeFilter">
-			<param name="LevelMin" value="TRACE"/>
-			<param name="LevelMax" value="TRACE"/>
-		</filter>
-	</appender>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%c %d [%t] %p -- %m%n"/>
+        </layout>
+        <!-- 配置过滤器，此文件只输出INFO信息 -->
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="TRACE"/>
+            <param name="LevelMax" value="TRACE"/>
+        </filter>
+    </appender>
 
-	<logger name="com.psx.social.websocket.SpringWebSocketHandler" additivity="true">
-		<level value="INFO"/>
-		<appender-ref ref="ChatRoom"/>
-	</logger>
-	<root>
-		<level value="INFO"/>
-		<appender-ref ref="CONSOLE"/>
-	</root>
+    <logger name="com.psx.social.websocket.WebSocketHandler" additivity="true">
+        <level value="INFO"/>
+        <appender-ref ref="ChatRoom"/>
+    </logger>
+    <root>
+        <level value="INFO"/>
+        <appender-ref ref="CONSOLE"/>
+    </root>
 
 
 </log4j:configuration>
