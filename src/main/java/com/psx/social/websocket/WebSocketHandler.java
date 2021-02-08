@@ -5,10 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import javax.websocket.OnClose;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
+import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -76,14 +73,14 @@ public class WebSocketHandler {
 
     /**
      * 发生错误时调用
-     *
-     * @OnError public void onError(Session session, Throwable error) {
-     * System.out.println("发生错误");
-     * error.printStackTrace();
-     * }
-     * <p>
-     * <p>
-     * /**
+     */
+    @OnError
+    public void onError(Session session, Throwable error) {
+        System.out.println("发生错误");
+        error.printStackTrace();
+    }
+
+    /**
      * 群发自定义消息
      */
     public static void sendInfo(String message) throws IOException {
