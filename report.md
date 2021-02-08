@@ -66,3 +66,6 @@ Postman-Token: 75df74a5-36ae-498c-a12b-7848f4876e75
 	"birth":null, 
 	"gender":null
 }
+
+mvn install -Dmaven.test.skip=true
+
