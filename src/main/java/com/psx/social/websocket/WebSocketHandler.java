@@ -1,5 +1,6 @@
 package com.psx.social.websocket;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @ServerEndpoint(value = "/websocket")
 @Component
 public class WebSocketHandler {
-    private static final Logger LOGGER = LoggerFactory.getLogger(WebSocketHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger("appLogAppender");
     //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
     private static int onlineCount = 0;
 
@@ -34,10 +35,13 @@ public class WebSocketHandler {
         webSocketSet.add(this);     //加入set中
         addOnlineCount();           //在线数加1
         LOGGER.info("有新连接加入！当前在线人数为:{}", getOnlineCount());
-        try {
-            sendMessage("有新连接加入！当前在线人数为" + getOnlineCount());
-        } catch (IOException e) {
-            System.out.println("IO异常");
+        //群发消息
+        for (WebSocketHandler item : webSocketSet) {
+            try {
+                item.sendMessage("有新连接加入！当前在线人数为" + getOnlineCount());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -48,7 +52,7 @@ public class WebSocketHandler {
     public void onClose() {
         webSocketSet.remove(this);  //从set中删除
         subOnlineCount();           //在线数减1
-        System.out.println("有一连接关闭！当前在线人数为" + getOnlineCount());
+        LOGGER.info("有一连接关闭！当前在线人数为" + getOnlineCount());
     }
 
     /**
@@ -58,7 +62,7 @@ public class WebSocketHandler {
      */
     @OnMessage
     public void onMessage(String message, Session session) {
-        System.out.println("来自客户端的消息:" + message);
+        LOGGER.info("来自客户端的消息:" + message);
 
         //群发消息
         for (WebSocketHandler item : webSocketSet) {

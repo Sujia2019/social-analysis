@@ -20,7 +20,7 @@ public class FriendController {
     @Autowired
     SettingService settingService;
 
-    @ApiOperation("发送好友申请")
+    @ApiOperation("发送好友申请(创建一条关系)")
     @RequestMapping(value = "addRequest", method = RequestMethod.POST)
     @ResponseBody
     public ReturnT<?> addRequest(@RequestBody FriendRequest request){
@@ -45,6 +45,14 @@ public class FriendController {
     public ReturnT<?> getFriendInfo(@RequestParam(required = false) String account) {
         // TODO 不传account 从session查，session如果过期就跳登录页
         return new ReturnT<>(Constants.SUCCESS, friendService.showFriends(account));
+    }
+
+    @ApiOperation("修改好友关系，包括删除，接受好友请求都是一样")
+    @RequestMapping(value = "getFriends", method = RequestMethod.POST)
+    @ResponseBody
+    public ReturnT<?> update(@RequestBody(required = false) FriendRequest request) {
+        // TODO 不传account 从session查，session如果过期就跳登录页
+        return new ReturnT<>(Constants.SUCCESS, friendService.update(request));
     }
 
 }

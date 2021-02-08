@@ -84,10 +84,33 @@ public class FriendServiceImpl implements FriendService {
 
     @Override
     public int findRelationByAccount(String account1, String account2) {
-        FriendRequest friendRequest = friendMapper.findRelationByAccount(account1,account2);
-        if (friendRequest != null){
+        FriendRequest friendRequest = friendMapper.findRelationByAccount(account1, account2);
+        if (friendRequest != null) {
             return friendRequest.getAddStatus();
         }
         return -1;
+    }
+
+    @Override
+    public boolean update(FriendRequest request) {
+        int flag = request.getAddStatus();
+        String ac1 = request.getAccount1();
+        String ac2 = request.getAccount2();
+        switch (flag) {
+            case -1:
+                delFriend(ac1, ac2);
+                return true;
+            case 0:
+                addRequest(request);
+                return true;
+            case 1:
+                acceptRequest(ac1, ac2);
+                return true;
+            case 2:
+                refuseRequest(request);
+                return true;
+            default:
+                return false;
+        }
     }
 }
