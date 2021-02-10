@@ -76,7 +76,7 @@ public class WebSocketHandler {
      */
     @OnError
     public void onError(Session session, Throwable error) {
-        System.out.println("发生错误");
+        LOGGER.error("发生错误");
         error.printStackTrace();
     }
 

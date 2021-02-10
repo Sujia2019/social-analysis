@@ -21,7 +21,7 @@ public class ChatListener {
         Resource[] resources = new Resource[0];
         try {
             resources = new PathMatchingResourcePatternResolver()
-                    .getResources(ResourceUtils.CLASSPATH_URL_PREFIX + "logs/*");
+                    .getResources("/home/sujia/social-logs/*");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -33,7 +33,7 @@ public class ChatListener {
     }
 
     public static String getLog(String fileName) {
-        ClassPathResource classPathResource = new ClassPathResource("logs/" + fileName);
+        Resource classPathResource = new PathResource("/home/sujia/social-logs/" + fileName);
         InputStream in = null;
         try {
             in = classPathResource.getInputStream();
