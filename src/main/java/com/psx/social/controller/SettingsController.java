@@ -23,4 +23,11 @@ public class SettingsController {
         settingService.updateUserSettings(settings);
         return new ReturnT<>(Constants.SUCCESS, "保存成功");
     }
+
+    @ApiOperation("查看设置")
+    @RequestMapping(value = "search", method = RequestMethod.GET)
+    @ResponseBody
+    public ReturnT<?> search(@RequestParam String account) {
+        return new ReturnT<>(Constants.SUCCESS, settingService.getUserSettings(account));
+    }
 }

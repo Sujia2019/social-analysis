@@ -46,6 +46,10 @@ public class StudentController {
     public ReturnT<?> showInfo(@RequestParam(required = false) String account,
                                HttpServletRequest request) {
         UserDTO user = (UserDTO) request.getSession().getAttribute("user");
+        if (null == user) {
+            return new ReturnT<>(Constants.FAIL, "请登录");
+        }
+        // 表示查看自己
         if (account == null || account.equals(user.getUser_account())) {
             return new ReturnT<>(Constants.SUCCESS, user.getUserInfo());
         } else {

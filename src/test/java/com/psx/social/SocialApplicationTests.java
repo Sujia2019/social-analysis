@@ -2,11 +2,9 @@ package com.psx.social;
 
 import com.psx.social.controller.IndexController;
 import com.psx.social.dao.FriendMapper;
+import com.psx.social.dao.SettingsMapper;
 import com.psx.social.dao.UserBaseMapper;
-import com.psx.social.entity.FriendRequest;
-import com.psx.social.entity.UserBase;
-import com.psx.social.entity.UserDTO;
-import com.psx.social.entity.UserInfo;
+import com.psx.social.entity.*;
 import com.psx.social.service.UserService;
 import com.psx.social.util.ReturnT;
 import com.psx.social.util.Verify;
@@ -35,6 +33,8 @@ class SocialApplicationTests {
     Verify verify;
     @Autowired
     IndexController indexController;
+    @Autowired
+    SettingsMapper settingsMapper;
 
     @Test
     public void doLogin() {
@@ -102,6 +102,16 @@ class SocialApplicationTests {
         UserInfo userInfo = new UserInfo();
         userInfo.setUser_account("sujia");
         System.out.println(userService.findUsersInfoByLikeQuery(userInfo));
+    }
 
+    @Test
+    public void settings() {
+        Settings settings = new Settings();
+        settings.setUser_account("test");
+        settings.setReceive_board(true);
+        settings.setReceive_friend(true);
+        settings.setSend_notice(true);
+        settings.setShow_board(true);
+        settingsMapper.update(settings);
     }
 }
