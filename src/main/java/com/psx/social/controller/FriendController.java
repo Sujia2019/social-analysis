@@ -48,11 +48,18 @@ public class FriendController {
     }
 
     @ApiOperation("修改好友关系，包括删除，接受好友请求都是一样")
-    @RequestMapping(value = "getFriends", method = RequestMethod.POST)
+    @RequestMapping(value = "update", method = RequestMethod.POST)
     @ResponseBody
     public ReturnT<?> update(@RequestBody(required = false) FriendRequest request) {
         // TODO 不传account 从session查，session如果过期就跳登录页
         return new ReturnT<>(Constants.SUCCESS, friendService.update(request));
     }
 
+//    @ApiOperation("修改好友关系，包括删除，接受好友请求都是一样")
+//    @RequestMapping(value = "getRequest", method = RequestMethod.GET)
+//    @ResponseBody
+//    public ReturnT<?> getRequest(@RequestBody(required = false) String account) {
+//        // TODO 不传account 从session查，session如果过期就跳登录页
+//        return new ReturnT<>(Constants.SUCCESS, friendService.(request));
+//    }
 }

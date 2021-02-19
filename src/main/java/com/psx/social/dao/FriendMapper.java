@@ -47,10 +47,20 @@ public interface FriendMapper {
     @Results({
             @Result(column = "account1", property = "account1"),
             @Result(column = "account2", property = "account2"),
-            @Result(column = "addStatus", property = "addStatus")
+            @Result(column = "addStatus", property = "addStatus"),
+            @Result(column = "detail", property = "detail")
     })
     @Select("select * from pyq where account1=#{account1} and account2=#{account2}")
-    FriendRequest findRelationByAccount(String account1,String account2);
+    FriendRequest findRelationByAccount(String account1, String account2);
+
+    @Results({
+            @Result(column = "account1", property = "account1"),
+            @Result(column = "account2", property = "account2"),
+            @Result(column = "addStatus", property = "addStatus"),
+            @Result(column = "detail", property = "detail")
+    })
+    @Select("select * from pyq where account2=#{account} and addStatus=0")
+    FriendRequest findRequest(String account);
 
 
 }
