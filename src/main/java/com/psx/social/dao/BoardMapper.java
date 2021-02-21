@@ -14,8 +14,9 @@ public interface BoardMapper {
     @Select("select board_text,from_name,from_account,date_time from BoardMsg" +
             " where user_account=#{account} order by date_time DESC")
     List<BoardMsg> showBoardMsg(String account);
-    @Insert("insert into BoardMsg(user_account, from_name,from_account, board_text, date_time)" +
-            "values (#{user_account},#{from_name},#{from_account},#{board_text},now() )")
+
+    @Insert("insert into BoardMsg(user_account,from_name,from_account,board_text,date_time)" +
+            "values(#{user_account},#{from_name},#{from_account},#{board_text},now())")
     boolean insertBoardMsg(BoardMsg msg);
 
     @Select("select count(*) from BoardMsg where user_account=#{account}")
