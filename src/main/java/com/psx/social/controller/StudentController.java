@@ -89,6 +89,13 @@ public class StudentController {
         return new ReturnT<>(Constants.SUCCESS, Constants.SUCCESS_MSG, userDto);
     }
 
+    @ApiOperation("获取某用户的信息")
+    @RequestMapping(value = "getByAccount", method = RequestMethod.GET)
+    @ResponseBody
+    public ReturnT<?> getByAccount(String account) {
+        return new ReturnT<>(Constants.SUCCESS, Constants.SUCCESS_MSG, userService.findUserByAccount(account));
+    }
+
 }
 
 

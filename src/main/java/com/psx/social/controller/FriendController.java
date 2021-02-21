@@ -55,11 +55,10 @@ public class FriendController {
         return new ReturnT<>(Constants.SUCCESS, friendService.update(request));
     }
 
-//    @ApiOperation("修改好友关系，包括删除，接受好友请求都是一样")
-//    @RequestMapping(value = "getRequest", method = RequestMethod.GET)
-//    @ResponseBody
-//    public ReturnT<?> getRequest(@RequestBody(required = false) String account) {
-//        // TODO 不传account 从session查，session如果过期就跳登录页
-//        return new ReturnT<>(Constants.SUCCESS, friendService.(account));
-//    }
+    @ApiOperation("查看向自己申请的好友信息,flag为0表示查询我发起的请求，1表示向我发起待我处理的请求")
+    @RequestMapping(value = "getRequest", method = RequestMethod.GET)
+    @ResponseBody
+    public ReturnT<?> getRequest(@RequestParam String account, Integer flag) {
+        return new ReturnT<>(Constants.SUCCESS, friendService.getRequest(account, flag));
+    }
 }

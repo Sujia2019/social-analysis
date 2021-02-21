@@ -60,7 +60,16 @@ public interface FriendMapper {
             @Result(column = "detail", property = "detail")
     })
     @Select("select * from pyq where account2=#{account} and addStatus=0")
-    FriendRequest findRequest(String account);
+    List<FriendRequest> findRequest2(String account);
+
+    @Results({
+            @Result(column = "account1", property = "account1"),
+            @Result(column = "account2", property = "account2"),
+            @Result(column = "addStatus", property = "addStatus"),
+            @Result(column = "detail", property = "detail")
+    })
+    @Select("select * from pyq where account1=#{account} and addStatus=0")
+    List<FriendRequest> findRequest1(String account);
 
 
 }

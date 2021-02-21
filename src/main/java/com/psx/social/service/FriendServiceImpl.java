@@ -3,11 +3,16 @@ package com.psx.social.service;
 import com.psx.social.dao.FriendMapper;
 import com.psx.social.dao.UserInfoMapper;
 import com.psx.social.entity.FriendRequest;
+import com.psx.social.entity.RequestDTO;
 import com.psx.social.entity.UserInfo;
+import com.psx.social.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Transactional
@@ -112,5 +117,45 @@ public class FriendServiceImpl implements FriendService {
             default:
                 return false;
         }
+    }
+
+    @Override
+    public List<RequestDTO> getRequest(String account, int flag) {
+        List<FriendRequest> requests = new ArrayList<>();
+        // 我发起的
+        if (flag == Constants.ME) {
+            requests = friendMapper.findRequest1(account);
+            return convertToDTO2(requests);
+        } else if (flag == Constants.OTHER) {
+            requests = friendMapper.findRequest2(account);
+            return convertToDTO1(requests);
+        }
+        return Collections.EMPTY_LIST;
+    }
+
+    private List<RequestDTO> convertToDTO1(List<FriendRequest> requests) {
+        List<RequestDTO> requestDTOS = new ArrayList<>();
+        for (FriendRequest request : requests) {
+            RequestDTO requestDTO = new RequestDTO();
+            requestDTO.setSelfAccount(request.getAccount2());
+            requestDTO.setAccount(request.getAccount1());
+            requestDTO.setName(userInfoMapper.findUserByAccount(request.getAccount1()).getSname());
+            requestDTO.setDetail(request.getDetail());
+            requestDTOS.add(requestDTO);
+        }
+        return requestDTOS;
+    }
+
+    private List<RequestDTO> convertToDTO2(List<FriendRequest> requests) {
+        List<RequestDTO> requestDTOS = new ArrayList<>();
+        for (FriendRequest request : requests) {
+            RequestDTO requestDTO = new RequestDTO();
+            requestDTO.setSelfAccount(request.getAccount1());
+            requestDTO.setAccount(request.getAccount2());
+            requestDTO.setName(userInfoMapper.findUserByAccount(request.getAccount2()).getSname());
+            requestDTO.setDetail(request.getDetail());
+            requestDTOS.add(requestDTO);
+        }
+        return requestDTOS;
     }
 }

@@ -3,6 +3,7 @@ package com.psx.social.service;
 
 import com.psx.social.entity.BoardMsg;
 import com.psx.social.entity.FriendRequest;
+import com.psx.social.entity.RequestDTO;
 import com.psx.social.entity.UserInfo;
 
 import java.util.List;
@@ -34,4 +35,6 @@ public interface FriendService {
 
     // 通用修改好友关系
     boolean update(FriendRequest friendRequest);
+
+    List<RequestDTO> getRequest(String account, int flag);
 }
