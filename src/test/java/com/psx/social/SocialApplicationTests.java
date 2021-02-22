@@ -115,8 +115,8 @@ class SocialApplicationTests {
         settingsMapper.update(settings);
     }
 
-    @Test
-    public void searchRequest() {
-        System.out.println(friendMapper.findRequest("test"));
-    }
+//    @Test
+//    public void searchRequest() {
+//        System.out.println(friendMapper.findRequest("test"));
+//    }
 }

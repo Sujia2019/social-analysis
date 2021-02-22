@@ -41,18 +41,18 @@ public class IndexController {
         UserDTO userDTO;
         if (session.getAttribute("user") != null) {
             // 说明已经登陆，session中有缓存，不必再次登录
-            userDTO= (UserDTO)session.getAttribute("user");
-            // 将缓存对象直接返回
-            returnT = new ReturnT<>(Constants.SUCCESS,Constants.SUCCESS_MSG,userDTO);
-        }else{
-            // 走业务层查库
-            userDTO = userService.doLogin(userBase);
-            if (userDTO != null) {
-                returnT = new ReturnT<>(Constants.SUCCESS, Constants.SUCCESS_MSG, userDTO);
-                session.setAttribute("user", userDTO);
-            } else {
-                returnT = new ReturnT<>(Constants.FAIL, "账号或密码错误，登录失败");
-            }
+            userDTO = (UserDTO) session.getAttribute("user");
+            if (userDTO.getUser_account().equals(userBase.getUser_account()))
+                // 将缓存对象直接返回
+                return new ReturnT<>(Constants.SUCCESS, Constants.SUCCESS_MSG, userDTO);
+        }
+        // 走业务层查库
+        userDTO = userService.doLogin(userBase);
+        if (userDTO != null) {
+            returnT = new ReturnT<>(Constants.SUCCESS, Constants.SUCCESS_MSG, userDTO);
+            session.setAttribute("user", userDTO);
+        } else {
+            returnT = new ReturnT<>(Constants.FAIL, "账号或密码错误，登录失败");
         }
         return returnT;
     }
