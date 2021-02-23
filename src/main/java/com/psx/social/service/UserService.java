@@ -29,7 +29,7 @@ public interface UserService {
     boolean updateUser(UserInfo user);
 
     // 查找一个用户的扩展信息
-    UserMore findUserBoard(String account);
+    UserMore findUserMore(String account);
 
     // 计算分数
     UserMore addScores(String account, List<ReturnAnswer> list);

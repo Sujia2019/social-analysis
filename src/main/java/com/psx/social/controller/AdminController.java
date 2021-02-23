@@ -3,7 +3,9 @@ package com.psx.social.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.psx.social.entity.AnalyzingData;
+import com.psx.social.entity.UserDTO;
 import com.psx.social.entity.UserInfo;
+import com.psx.social.service.BoardService;
 import com.psx.social.service.QuestionService;
 import com.psx.social.service.UserService;
 import com.psx.social.util.ChatListener;
@@ -28,6 +30,8 @@ public class AdminController {
     UserService userService;
     @Autowired
     QuestionService questionService;
+    @Autowired
+    BoardService boardService;
 
     @ApiOperation("查询所有学生")
     @RequestMapping(value = "findAll", method = RequestMethod.GET)//查询所有
@@ -106,7 +110,7 @@ public class AdminController {
     }
 
     @ApiOperation("根据账号删除")
-    @RequestMapping(value = "delete", method = RequestMethod.DELETE)
+    @RequestMapping(value = "delete", method = RequestMethod.POST)
     @ResponseBody
     public ReturnT<?> delete(@RequestParam String account) {
         if (userService.delUser(account))
@@ -137,6 +141,18 @@ public class AdminController {
     @ResponseBody
     public ReturnT<?> getChatLog(@RequestParam String fileName) {
         return new ReturnT<>(Constants.SUCCESS, ChatListener.getLog(fileName));
+    }
+
+
+    @ApiOperation("查询特定学生信息")
+    @RequestMapping(value = "findUserByAccount", method = RequestMethod.GET)//查询所有
+    @ResponseBody
+    public ReturnT<?> findUserByAccount(@RequestParam(required = false) String account) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUserInfo(userService.findUserByAccount(account));
+        userDTO.setUserMore(userService.findUserMore(account));
+        userDTO.setMsg(boardService.showBoardMsg(account));
+        return new ReturnT<>(Constants.SUCCESS, userDTO);
     }
 
 }
