@@ -32,13 +32,20 @@ public interface FriendMapper {
 
     @Insert("insert into pyq(account1,account2,detail,addStatus) values (#{account1},#{account2},#{detail},#{addStatus})")
     boolean insert(FriendRequest request);
-    @Update("<script> update pyq set" +
-            "    addStatus=#{addStatus}" +
-            " <if test=\"null !=detail\"> " +
-            "    detail=#{detail}, " +
-            " </if> +" +
-            "    where account1=#{account1} and account2=#{account2}" +
-            "</script>")
+
+    //    @Update("<script> update pyq set" +
+//            "    addStatus=#{addStatus}" +
+//            " <if test=\"null !=detail\"> " +
+//            "    detail=#{detail}, " +
+//            " </if> +" +
+//            "    where account1=#{account1} and account2=#{account2}" +
+//            "</script>")
+    @Update("<script> update pyq set addStatus=#{addStatus}" +
+            "   <if test=\"null != detail\">" +
+            "       detail = #{detail}," +
+            "   </if>" +
+            "       where account1=#{account1} and account2=#{account2}" +
+            "   </script>")
     boolean updateRequest(FriendRequest request);
 
     @Delete(" delete from pyq where account1=#{account1} and account2=#{account2}")

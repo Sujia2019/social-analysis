@@ -22,7 +22,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         list.add("/stu/**");
         list.add("/settings/**");
         list.add("/question/**");
-        list.add("/friend/**");
+//        list.add("/friend/**");
         list.add("/admin/**");
     }
 
