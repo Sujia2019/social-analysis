@@ -2,10 +2,7 @@ package com.psx.social.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.psx.social.entity.Question;
-import com.psx.social.entity.ReturnAnswer;
-import com.psx.social.entity.UserInfo;
-import com.psx.social.entity.UserMore;
+import com.psx.social.entity.*;
 import com.psx.social.service.QuestionService;
 import com.psx.social.service.UserService;
 import com.psx.social.util.Constants;
@@ -49,12 +46,17 @@ public class QuestionController {
     @RequestMapping(value = "sendAnswers", method = RequestMethod.POST)
     @ResponseBody
     public ReturnT<?> Answers(@RequestBody List<ReturnAnswer> answersList, HttpServletRequest request) {
-        String account = ((UserInfo) request.getSession().getAttribute("UserInfo")).getUser_account();
-        HttpSession session = request.getSession();
-        UserMore userMore = userService.addScores(account, answersList);
-        session.setAttribute("UserMore", userMore);
-        LOGGER.info("保存用户【{}】的更多信息【{}】至session中...", account, userMore.toString());
-        return new ReturnT<>(Constants.SUCCESS, "保存答案成功", userMore);
+        UserDTO userDTO = ((UserDTO) request.getSession().getAttribute("User"));
+        if (userDTO != null) {
+            String account = userDTO.getUserInfo().getUser_account();
+            HttpSession session = request.getSession();
+            UserMore userMore = userService.addScores(account, answersList);
+            userDTO.setUserMore(userMore);
+            session.setAttribute("User", userDTO);
+            LOGGER.info("保存用户【{}】的更多信息【{}】至session中...", account, userMore.toString());
+            return new ReturnT<>(Constants.SUCCESS, "保存答案成功", userMore);
+        }
+        return new ReturnT<>(Constants.FAIL, "保存答案失败，请重试");
     }
 
     // 获取答题测评结果
