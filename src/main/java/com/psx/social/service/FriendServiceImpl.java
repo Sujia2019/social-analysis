@@ -3,13 +3,13 @@ package com.psx.social.service;
 import com.psx.social.dao.FriendMapper;
 import com.psx.social.dao.UserInfoMapper;
 import com.psx.social.entity.FriendRequest;
+import com.psx.social.entity.MailDTO;
 import com.psx.social.entity.RequestDTO;
 import com.psx.social.entity.UserInfo;
 import com.psx.social.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,14 +37,24 @@ public class FriendServiceImpl implements FriendService {
         String a1 = friendRequest.getAccount1();
         String a2 = friendRequest.getAccount2();
         int relation = findRelationByAccount(a1,a2);
-        if (relation > 0){
+        if (relation > 0) {
             return friendMapper.updateRequest(friendRequest);
         }
         // 重复申请
-        if (relation == 0){
+        if (relation == 0) {
             return true;
         }
+        sender(a1, a2, friendRequest.getDetail());
         return friendMapper.insert(friendRequest);
+    }
+
+    private void sender(String a1, String a2, String text) {
+        MailDTO mail = new MailDTO();
+        UserInfo userInfoTo = userInfoMapper.findUserByAccount(a2);
+        UserInfo userInfoFrom = userInfoMapper.findUserByAccount(a1);
+        mail.setTitle("【xxx平台】您有一条来自【" + userInfoFrom.getSname() + "】发起的的申请消息");
+        mail.setTo(userInfoTo.getEmail());
+        mail.setText("您有一条来自" + userInfoFrom.getSname() + "的消息，申请内容为：\n\n" + text);
     }
 
     @Override
@@ -56,7 +66,16 @@ public class FriendServiceImpl implements FriendService {
         friendMapper.updateRequest(request);
         request.setAccount1(account2);
         request.setAccount2(account1);
+        senderAccept(account1);
         return friendMapper.insert(request);
+    }
+
+    private void senderAccept(String account) {
+        MailDTO mail = new MailDTO();
+        UserInfo userInfo = userInfoMapper.findUserByAccount(account);
+        mail.setTitle("【xxx平台】您有一条来自【" + userInfo.getSname() + "】的好友消息");
+        mail.setTo(userInfo.getEmail());
+        mail.setText("您有一条来自" + userInfo.getSname() + "的好友消息\n\n" + "我们已经是好友啦！");
     }
 
     @Override

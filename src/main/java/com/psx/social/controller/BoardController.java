@@ -15,6 +15,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Collections;
 
 @Api("留言板")
@@ -64,4 +65,35 @@ public class BoardController {
         return new ReturnT<>(Constants.FAIL, "对方设置了留言权限，陌生人暂时无法留言");
     }
 
+    @RequestMapping(value = "newMsgCount")
+    @ResponseBody
+    public ReturnT<?> newMsgCount(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        return new ReturnT<>(Constants.SUCCESS, "新的留言",
+                boardService.tipMsgCount(((UserDTO) session.getAttribute("user")).getUser_account()));
+    }
+
+    @RequestMapping(value = "newRequestCount")
+    @ResponseBody
+    public ReturnT<?> newRequestCount(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        return new ReturnT<>(Constants.SUCCESS, "新的好友请求",
+                boardService.tipRequestCount(((UserDTO) session.getAttribute("user")).getUser_account()));
+    }
+
+    @RequestMapping(value = "changeHistoryMsg")
+    @ResponseBody
+    public ReturnT<?> changeHistoryMsg(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        return new ReturnT<>(Constants.SUCCESS, "更新历史留言条数",
+                boardService.historyMsgCount(((UserDTO) session.getAttribute("user")).getUser_account()));
+    }
+
+    @RequestMapping(value = "changeHistoryRequest")
+    @ResponseBody
+    public ReturnT<?> changeHistoryRequest(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        return new ReturnT<>(Constants.SUCCESS, "更新历史请求条数",
+                boardService.historyRequestCount(((UserDTO) session.getAttribute("user")).getUser_account()));
+    }
 }

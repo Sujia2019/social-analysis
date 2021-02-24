@@ -27,6 +27,7 @@ public class QuestionServiceImpl implements QuestionService{
 
     @Override
     public List<Question> showQuestion() {
+        // TODO 随机获取一个
         QuestionPage page = questionMapper.questionList().get(0);
         return LoadTxt.ReadQuestions(page.getPageUrl());
     }

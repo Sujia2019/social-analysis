@@ -21,7 +21,7 @@ public interface FriendMapper {
     @Update("update UserMore set requestCount=#{count} where user_account=#{account}")
     int setHistoryRequestCount(Tips tips);
 
-    @Select("select a.* from psx_db.UserInfo a left join psx_db.pyq p on a.user_account=p.account2 where p.addStatus=1;")
+    @Select("select a.* from psx_db.UserInfo a left join psx_db.pyq p on a.user_account=p.account2 where p.addStatus=1 and p.account1=#{account};")
     List<UserInfo> friendList(String account);
     @Select("select a.* from psx_db.UserInfo a left join psx_db.pyq p on a.user_account=p.account2 where p.addStatus=0;")
     List<UserInfo> friendRequestList(String account);

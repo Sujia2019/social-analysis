@@ -6,6 +6,7 @@ import com.psx.social.dao.SettingsMapper;
 import com.psx.social.dao.UserBaseMapper;
 import com.psx.social.entity.*;
 import com.psx.social.service.UserService;
+import com.psx.social.util.MailConfig;
 import com.psx.social.util.ReturnT;
 import com.psx.social.util.Verify;
 import org.junit.jupiter.api.Test;
@@ -35,6 +36,8 @@ class SocialApplicationTests {
     IndexController indexController;
     @Autowired
     SettingsMapper settingsMapper;
+    @Autowired
+    MailConfig mailConfig;
 
     @Test
     public void doLogin() {
@@ -115,8 +118,17 @@ class SocialApplicationTests {
         settingsMapper.update(settings);
     }
 
-//    @Test
-//    public void searchRequest() {
-//        System.out.println(friendMapper.findRequest("test"));
-//    }
+    @Test
+    public void mailSender() {
+        MailDTO mail = new MailDTO();
+        mail.setTitle("您有一条消息");
+        mail.setText("测试");
+        mail.setTo("18539403150@163.com");
+        mailConfig.send(mail);
+    }
+
+    @Test
+    public void getFriends() {
+        System.out.println(friendMapper.friendList("test"));
+    }
 }

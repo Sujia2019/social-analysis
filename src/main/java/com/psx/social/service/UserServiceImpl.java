@@ -82,6 +82,7 @@ public class UserServiceImpl implements UserService {
 
         userBaseMapper.insert(user);
         UserInfo userInfo = new UserInfo();
+        userInfo.setSname("用户" + System.currentTimeMillis());
         userInfo.setEmail(user.getEmail());
         userInfo.setPhone(user.getPhone());
         userInfo.setUser_account(user.getUser_account());
