@@ -74,8 +74,9 @@ public class StudentController {
         userService.updateUser(userInfo);
         System.out.println(userInfo.toString());
         HttpSession session = request.getSession();
-        session.removeAttribute("user");
-        session.setAttribute("user", userService.findUsersByAccount(userInfo.getUser_account()));
+        UserDTO userDto = (UserDTO) session.getAttribute("user");
+        userDto.setUserInfo(userInfo);
+        session.setAttribute("user", userDto);
         return new ReturnT<>(Constants.SUCCESS, Constants.SUCCESS_MSG);
     }
 
