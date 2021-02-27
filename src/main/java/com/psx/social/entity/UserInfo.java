@@ -2,6 +2,7 @@ package com.psx.social.entity;
 
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -22,5 +23,7 @@ public class UserInfo implements Serializable {
     private String major;
     private String birth;
     private Integer gender;
+    @ApiModelProperty("个性签名")
+    private String detail;
 
 }

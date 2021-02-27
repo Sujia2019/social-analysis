@@ -47,22 +47,40 @@ public class LoadTxt {
         return questions;
     }
 
-    public static String sendResult(String scores) {
+    public static String sendResult(String scores, String url) {
         String res = "";
         try {
-            ClassPathResource classPathResource = new ClassPathResource("classpath:questions/Research_2_Res");
+            ClassPathResource classPathResource = new ClassPathResource("classpath:questions/" + url);
             InputStream in = classPathResource.getInputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String str;
-            while ((str=br.readLine())!=null){
-                if(str.equals(scores)){
-                    res=br.readLine();
+            while ((str = br.readLine()) != null) {
+                if (str.equals(scores)) {
+                    res = br.readLine();
                 }
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return res;
+    }
+
+    public static void writeQuestions(String url, List<Question> questionList) {
+        for (Question question : questionList) {
+
+        }
+    }
+
+    public static void writeRes(String url, List<String> res) {
+        for (String str : res) {
+            try {
+                BufferedWriter out = new BufferedWriter(new FileWriter(url));
+                out.write("菜鸟教程");
+                out.close();
+                System.out.println("文件创建成功！");
+            } catch (IOException e) {
+            }
+        }
     }
 
 }

@@ -33,11 +33,17 @@ public class QuestionController {
     @ApiOperation("加载题目")
     @RequestMapping(value = "show", method = RequestMethod.GET)
     @ResponseBody
-    public ReturnT<?> showQuestions(@RequestParam int curr, int pageSize) {
-        PageHelper.startPage(curr, pageSize);
-        List<Question> questions = questionService.showQuestion();
-        LOGGER.info("加载题目：{}", questions.toString());
-        return PageUtil.getPageResult(new PageInfo<>(questions));
+    public ReturnT<?> showQuestions(@RequestParam int curr, int pageSize, HttpServletRequest request) {
+        UserDTO userDTO = (UserDTO) request.getSession().getAttribute("user");
+        if (userDTO != null) {
+            PageHelper.startPage(curr, pageSize);
+            String account = userDTO.getUser_account();
+            List<Question> questions = questionService.showQuestion(account);
+            LOGGER.info("加载题目：{}", questions.toString());
+            return PageUtil.getPageResult(new PageInfo<>(questions));
+        }
+        return new ReturnT<>(Constants.FAIL, "用户异常");
+
 
     }
 
@@ -80,5 +86,14 @@ public class QuestionController {
             returnT = new ReturnT<>(Constants.SUCCESS, "您还未完成测评题目，正在跳转页面", false);
         }
         return returnT;
+    }
+
+    // 检测是否完成题目
+    @ApiOperation("创建新的问卷,res是答题后分析结果评级ABCD对应的四条详情")
+    @RequestMapping(value = "addQuestions", method = RequestMethod.POST)
+    @ResponseBody
+    public ReturnT<?> addQuestionPage(@RequestBody List<Question> questionList,
+                                      @RequestBody List<String> res) {
+        return questionService.addNewQuestions(questionList, res);
     }
 }

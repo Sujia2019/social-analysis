@@ -12,17 +12,19 @@ import java.util.List;
 @Repository
 public interface UserInfoMapper {
 
-    @Insert("insert into psx_db.UserInfo(user_account, sname, sage,email,phone,birth,gender,major,collage)" +
-            " values (#{user_account},#{sname},#{sage},#{email},#{phone},#{birth},#{gender},#{major},#{collage})")
+    @Insert("insert into psx_db.UserInfo(user_account, sname, sage,email,phone,birth,gender,major,collage,detail)" +
+            " values (#{user_account},#{sname},#{sage},#{email},#{phone},#{birth},#{gender},#{major},#{collage},#{detail})")
     int insert(UserInfo userInfo);
 
     @Select("select * from UserInfo")
     List<UserInfo> findAll();
+
     @Select("select * from UserInfo where user_account like concat('%',#{user_account},'%')")
     List<UserInfo> findUsersByAccount(String account);
 
     @Select("select * from UserInfo where sname concat('%',#{sname},'%')")
     List<UserInfo> findUsersByName(String name);
+
     @Select("select * from UserInfo where sage=#{age}")
     List<UserInfo> findUsersByAge(int age);
     @Select("select * from UserInfo where collage=#{collage}")
@@ -35,7 +37,7 @@ public interface UserInfoMapper {
     @Update("update psx_db.UserInfo SET " +
             "sname = #{sname},sage=#{sage}," +
             "email=#{email},phone=#{phone},major=#{major}," +
-            "gender=#{gender},birth=#{birth},collage=#{collage}" +
+            "gender=#{gender},birth=#{birth},collage=#{collage},detail=#{detail}" +
             "where user_account=#{user_account}")
     boolean updateUser(UserInfo user);
 

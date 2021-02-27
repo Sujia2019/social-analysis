@@ -30,6 +30,8 @@ public class UserServiceImpl implements UserService {
     UserMoreMapper userMoreMapper;
     @Autowired
     SettingsMapper settingsMapper;
+    @Autowired
+    QuestionMapper questionMapper;
 
 
     @Override
@@ -184,6 +186,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResultMsg returnResult(String account) {
         int scores = userMoreMapper.findScoreByAccount(account);
+        String url = questionMapper.findUserQuestion(account).getRes_url();
         String rate;
         if(scores>=48){
             rate="A";
@@ -198,7 +201,7 @@ public class UserServiceImpl implements UserService {
         res.setUser_account(account);
         res.setRate(rate);
         res.setScore(scores);
-        res.setDetail(LoadTxt.sendResult(rate));
+        res.setDetail(LoadTxt.sendResult(rate, url));
         return res;
     }
 
@@ -220,11 +223,12 @@ public class UserServiceImpl implements UserService {
         userInfo.setMajor(Constants.PRIVATE);
         userInfo.setSage(-1);
         userInfo.setSname(Constants.PRIVATE);
+        userInfo.setDetail(Constants.PRIVATE);
         return userInfo;
     }
 
     @Override
-    public UserMore findUserBoard(String account) {
+    public UserMore findUserMore(String account) {
         return userMoreMapper.findByAccount(account);
     }
 
