@@ -20,8 +20,8 @@ public interface QuestionMapper {
 
     int update();
 
-    @Insert("insert into UserQuestion(user_account,question_utl,res_utl) " +
-            "values(#{user_account},#{question_utl},#{res_url})")
+    @Insert("insert into UserQuestion(user_account,question_url,res_url) " +
+            "values(#{user_account},#{question_url},#{res_url})")
     int insertUserQuestion(UserQuestion userQuestion);
 
     @Select("select * from UserQuestion where user_account=#{account}")

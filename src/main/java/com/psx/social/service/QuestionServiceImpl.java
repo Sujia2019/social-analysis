@@ -2,10 +2,7 @@ package com.psx.social.service;
 
 import com.psx.social.dao.QuestionMapper;
 import com.psx.social.dao.UserMoreMapper;
-import com.psx.social.entity.AnalyzingData;
-import com.psx.social.entity.Question;
-import com.psx.social.entity.QuestionPage;
-import com.psx.social.entity.UserQuestion;
+import com.psx.social.entity.*;
 import com.psx.social.util.Constants;
 import com.psx.social.util.LoadTxt;
 import com.psx.social.util.ReturnT;
@@ -13,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 @Transactional
@@ -33,6 +28,11 @@ public class QuestionServiceImpl implements QuestionService{
 
     @Override
     public List<Question> showQuestion(String account) {
+        UserMore userMore = userMoreMapper.findByAccount(account);
+        if (userMore.isIsFinishedQ()) {
+            UserQuestion userQuestion = questionMapper.findUserQuestion(account);
+            return LoadTxt.ReadQuestions(userQuestion.getQuestion_url());
+        }
         // 随机获取一个,并将对应信息存库
         List<QuestionPage> pages = questionMapper.questionList();
         Random r = new Random();
