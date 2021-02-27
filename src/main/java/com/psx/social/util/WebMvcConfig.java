@@ -19,7 +19,10 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         // 通过静态代码块开启项目只执行一次,
         list = new ArrayList<String>();
         list.add("/board/**"); // 需要拦截的接口
-        list.add("/stu/**");
+        list.add("/stu/getByAccount");
+        list.add("/stu/search");
+        list.add("/stu/showInfo");
+        list.add("/stu/update");
         list.add("/settings/**");
         list.add("/question/**");
         list.add("/friend/**");

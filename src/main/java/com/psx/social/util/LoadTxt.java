@@ -2,6 +2,8 @@ package com.psx.social.util;
 
 import com.psx.social.entity.Answer;
 import com.psx.social.entity.Question;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.*;
@@ -9,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LoadTxt {
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoadTxt.class);
 
     public static List<Question> ReadQuestions(String url){
         List<Question> questions = new ArrayList<>();
@@ -66,20 +69,37 @@ public class LoadTxt {
     }
 
     public static void writeQuestions(String url, List<Question> questionList) {
-        for (Question question : questionList) {
+        try {
+            BufferedWriter out = new BufferedWriter(new FileWriter(url));
+            for (Question question : questionList) {
+                out.write(question.getQuestionID() + "、" + question.getTitle() + "\n");
+                for (Answer a : question.getAnswers()) {
+                    out.write(a.getContext() + "//" + a.getScore() + "\n");
+                }
 
+            }
+            LOGGER.info("问卷创建成功！");
+            out.close();
+        } catch (IOException e) {
+            LOGGER.error("问卷创建失败\n{}", e.getMessage());
         }
     }
 
     public static void writeRes(String url, List<String> res) {
-        for (String str : res) {
-            try {
-                BufferedWriter out = new BufferedWriter(new FileWriter(url));
-                out.write("菜鸟教程");
-                out.close();
-                System.out.println("文件创建成功！");
-            } catch (IOException e) {
-            }
+        try {
+            BufferedWriter out = new BufferedWriter(new FileWriter(url));
+            out.write("A\n");
+            out.write(res.get(0) + "\n");
+            out.write("B\n");
+            out.write(res.get(1) + "\n");
+            out.write("C\n");
+            out.write(res.get(2) + "\n");
+            out.write("D\n");
+            out.write(res.get(3) + "\n");
+            out.close();
+            LOGGER.info("分析答案创建成功！");
+        } catch (IOException e) {
+            LOGGER.error("分析答案创建失败\n{}", e.getMessage());
         }
     }
 

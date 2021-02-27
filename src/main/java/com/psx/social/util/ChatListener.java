@@ -1,35 +1,21 @@
 package com.psx.social.util;
 
-import com.psx.social.entity.Answer;
-import com.psx.social.entity.Question;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.PathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.util.ResourceUtils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.io.*;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class ChatListener {
 
-    public static List<String> getLogsName() {
-        Resource[] resources = new Resource[0];
-        try {
-            resources = new PathMatchingResourcePatternResolver()
-                    .getResources("/home/sujia/social-logs/*");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        List<String> res = new ArrayList<>();
-        for (Resource resource : resources) {
-            res.add(resource.getFilename());
-        }
-        return res;
+    public static List getLogsName() {
+        String basePath = "/home/sujia/social-logs/";
+        String[] list = new File(basePath).list();
+        if (list != null)
+            return Arrays.asList(list);
+        return Collections.EMPTY_LIST;
     }
 
     public static String getLog(String fileName) {
