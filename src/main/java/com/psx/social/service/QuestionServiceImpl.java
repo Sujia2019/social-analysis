@@ -36,7 +36,7 @@ public class QuestionServiceImpl implements QuestionService{
         // 随机获取一个,并将对应信息存库
         List<QuestionPage> pages = questionMapper.questionList();
         Random r = new Random();
-        int max = pages.size() - 1;
+        int max = pages.size();
         int index = r.nextInt(max);
         String url = pages.get(index).getPageUrl();
         UserQuestion userQuestion = new UserQuestion();
