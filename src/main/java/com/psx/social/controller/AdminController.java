@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.psx.social.entity.AnalyzingData;
 import com.psx.social.entity.UserDTO;
 import com.psx.social.entity.UserInfo;
+import com.psx.social.entity.UserInfoDTO;
 import com.psx.social.service.BoardService;
 import com.psx.social.service.QuestionService;
 import com.psx.social.service.UserService;
@@ -101,11 +102,9 @@ public class AdminController {
     @ApiOperation("根据不同条件，模糊查询")
     @RequestMapping(value = "findUsersByLikeQuery", method = RequestMethod.POST)
     @ResponseBody
-    public ReturnT<?> findUsersByLikeQuery(@RequestBody UserInfo userInfo,
-                                           @RequestParam(required = false) int index,
-                                           @RequestParam(required = false) int perPage) {
-        PageHelper.startPage(index, perPage);
-        List<UserInfo> users = userService.findUsersInfoByLikeQuery(userInfo);
+    public ReturnT<?> findUsersByLikeQuery(@RequestBody UserInfoDTO userInfoDTO) {
+        PageHelper.startPage(userInfoDTO.getIndex(), userInfoDTO.getPerPage());
+        List<UserInfo> users = userService.findUsersInfoByLikeQuery(userInfoDTO.getUserInfo());
         return PageUtil.getPageResult(new PageInfo<>(users));
     }
 
