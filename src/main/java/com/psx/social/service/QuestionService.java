@@ -1,7 +1,9 @@
 package com.psx.social.service;
 
+import com.psx.social.entity.AddQuestionDTO;
 import com.psx.social.entity.AnalyzingData;
 import com.psx.social.entity.Question;
+import com.psx.social.entity.QuestionPage;
 import com.psx.social.util.ReturnT;
 
 import java.util.List;
@@ -22,4 +24,12 @@ public interface QuestionService {
 
     // 添加调查问卷
     ReturnT<?> addNewQuestions(List<Question> questions, List<String> res);
+
+    void delete(QuestionPage questionPage);
+
+    List<QuestionPage> getAvailableQuestions();
+
+    // 更新问卷
+    ReturnT<?> updateQuestions(AddQuestionDTO addQuestionDTO);
+
 }

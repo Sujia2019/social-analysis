@@ -14,4 +14,5 @@ public class QuestionPage implements Serializable {
     private String pageName; // 答题文档的名称
     private Date create_time;
     private Date modify_time;
+    private boolean available;
 }

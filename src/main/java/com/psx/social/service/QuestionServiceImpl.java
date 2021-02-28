@@ -29,8 +29,9 @@ public class QuestionServiceImpl implements QuestionService{
     @Override
     public List<Question> showQuestion(String account) {
         UserMore userMore = userMoreMapper.findByAccount(account);
+        UserQuestion userQuestion = questionMapper.findUserQuestion(account);
+        // 如果已经完成问卷
         if (userMore.isIsFinishedQ()) {
-            UserQuestion userQuestion = questionMapper.findUserQuestion(account);
             return LoadTxt.ReadQuestions(userQuestion.getQuestion_url());
         }
         // 随机获取一个,并将对应信息存库
@@ -39,11 +40,18 @@ public class QuestionServiceImpl implements QuestionService{
         int max = pages.size();
         int index = r.nextInt(max);
         String url = pages.get(index).getPageUrl();
-        UserQuestion userQuestion = new UserQuestion();
+        // 如果是首次进入
+        if (null == userQuestion) {
+            userQuestion = new UserQuestion();
+            userQuestion.setQuestion_url(url);
+            userQuestion.setUser_account(account);
+            userQuestion.setRes_url(url + "_Res");
+            questionMapper.insertUserQuestion(userQuestion);
+        }
+        // 更新
         userQuestion.setQuestion_url(url);
-        userQuestion.setUser_account(account);
-        userQuestion.setRes_url(url + "_Res");
-        questionMapper.insertUserQuestion(userQuestion);
+        questionMapper.updateUserQuestion(userQuestion);
+
         return LoadTxt.ReadQuestions(url);
     }
 
@@ -112,4 +120,27 @@ public class QuestionServiceImpl implements QuestionService{
         }
         return new ReturnT<>(Constants.SUCCESS, "添加成功");
     }
+
+    @Override
+    public void delete(QuestionPage questionPage) {
+        questionMapper.update(questionPage);
+    }
+
+    @Override
+    public List<QuestionPage> getAvailableQuestions() {
+        return questionMapper.questionList();
+    }
+
+    @Override
+    public ReturnT<?> updateQuestions(AddQuestionDTO addQuestionDTO) {
+        try {
+            String url = addQuestionDTO.getQuestionUrl();
+            LoadTxt.writeQuestions(url, addQuestionDTO.getQuestionList());
+            LoadTxt.writeRes(url + "_Res", addQuestionDTO.getRes());
+        } catch (Exception e) {
+            return new ReturnT<>(Constants.FAIL, e.getMessage());
+        }
+        return new ReturnT<>(Constants.SUCCESS, "更新成功");
+    }
+
 }
