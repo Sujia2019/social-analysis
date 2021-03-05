@@ -2,17 +2,11 @@ package com.psx.social.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.psx.social.entity.AnalyzingData;
-import com.psx.social.entity.UserDTO;
-import com.psx.social.entity.UserInfo;
-import com.psx.social.entity.UserInfoDTO;
+import com.psx.social.entity.*;
 import com.psx.social.service.BoardService;
 import com.psx.social.service.QuestionService;
 import com.psx.social.service.UserService;
-import com.psx.social.util.ChatListener;
-import com.psx.social.util.Constants;
-import com.psx.social.util.PageUtil;
-import com.psx.social.util.ReturnT;
+import com.psx.social.util.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -153,5 +147,37 @@ public class AdminController {
         userDTO.setMsg(boardService.showBoardMsg(account));
         return new ReturnT<>(Constants.SUCCESS, userDTO);
     }
+
+    @ApiOperation("查询可用问卷")
+    @RequestMapping(value = "getAvailableQuestions", method = RequestMethod.GET)
+    @ResponseBody
+    public ReturnT<?> getAvailableQuestions() {
+        return new ReturnT<>(Constants.SUCCESS, questionService.getAvailableQuestions());
+    }
+
+    @ApiOperation("删除问卷,available 置 0")
+    @RequestMapping(value = "deleteQuestions", method = RequestMethod.POST)
+    @ResponseBody
+    public ReturnT<?> deleteQuestions(@RequestBody QuestionPage questionPage) {
+        questionService.delete(questionPage);
+        return new ReturnT<>(Constants.SUCCESS, Constants.SUCCESS_MSG);
+    }
+
+    // 创建新的问卷
+    @ApiOperation("创建新的问卷,res是答题后分析结果评级ABCD对应的四条详情,questionUrl置空")
+    @RequestMapping(value = "addQuestions", method = RequestMethod.POST)
+    @ResponseBody
+    public ReturnT<?> addQuestionPage(@RequestBody AddQuestionDTO addQuestionDTO) {
+        return questionService.addNewQuestions(addQuestionDTO.getQuestionList(), addQuestionDTO.getRes());
+    }
+
+    // 更新问卷
+    @ApiOperation("QuestionUrl是通过查询可用问卷获取到的")
+    @RequestMapping(value = "updateQuestions", method = RequestMethod.POST)
+    @ResponseBody
+    public ReturnT<?> updateQuestions(@RequestBody AddQuestionDTO addQuestionDTO) {
+        return questionService.updateQuestions(addQuestionDTO);
+    }
+
 
 }

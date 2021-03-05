@@ -51,7 +51,7 @@ public class QuestionController {
     @ApiOperation("题目完成后保存答案")
     @RequestMapping(value = "sendAnswers", method = RequestMethod.POST)
     @ResponseBody
-    public ReturnT<?> Answers(@RequestBody List<ReturnAnswer> answersList, HttpServletRequest request) {
+    public ReturnT<?> Answers(HttpServletRequest request, @RequestBody List<ReturnAnswer> answersList) {
         UserDTO userDTO = ((UserDTO) request.getSession().getAttribute("User"));
         if (userDTO != null) {
             String account = userDTO.getUserInfo().getUser_account();
@@ -88,12 +88,5 @@ public class QuestionController {
         return returnT;
     }
 
-    // 检测是否完成题目
-    @ApiOperation("创建新的问卷,res是答题后分析结果评级ABCD对应的四条详情")
-    @RequestMapping(value = "addQuestions", method = RequestMethod.POST)
-    @ResponseBody
-    public ReturnT<?> addQuestionPage(@RequestBody List<Question> questionList,
-                                      @RequestBody List<String> res) {
-        return questionService.addNewQuestions(questionList, res);
-    }
+
 }

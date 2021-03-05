@@ -65,7 +65,7 @@ public class BoardController {
         return new ReturnT<>(Constants.FAIL, "对方设置了留言权限，陌生人暂时无法留言");
     }
 
-    @RequestMapping(value = "newMsgCount")
+    @RequestMapping(value = "newMsgCount", method = RequestMethod.GET)
     @ResponseBody
     public ReturnT<?> newMsgCount(HttpServletRequest request) {
         HttpSession session = request.getSession();
@@ -73,7 +73,7 @@ public class BoardController {
                 boardService.tipMsgCount(((UserDTO) session.getAttribute("user")).getUser_account()));
     }
 
-    @RequestMapping(value = "newRequestCount")
+    @RequestMapping(value = "newRequestCount", method = RequestMethod.GET)
     @ResponseBody
     public ReturnT<?> newRequestCount(HttpServletRequest request) {
         HttpSession session = request.getSession();
@@ -81,7 +81,7 @@ public class BoardController {
                 boardService.tipRequestCount(((UserDTO) session.getAttribute("user")).getUser_account()));
     }
 
-    @RequestMapping(value = "changeHistoryMsg")
+    @RequestMapping(value = "changeHistoryMsg", method = RequestMethod.GET)
     @ResponseBody
     public ReturnT<?> changeHistoryMsg(HttpServletRequest request) {
         HttpSession session = request.getSession();
@@ -89,7 +89,7 @@ public class BoardController {
                 boardService.historyMsgCount(((UserDTO) session.getAttribute("user")).getUser_account()));
     }
 
-    @RequestMapping(value = "changeHistoryRequest")
+    @RequestMapping(value = "changeHistoryRequest", method = RequestMethod.GET)
     @ResponseBody
     public ReturnT<?> changeHistoryRequest(HttpServletRequest request) {
         HttpSession session = request.getSession();

@@ -72,7 +72,7 @@ public class StudentController {
     @ResponseBody
     public ReturnT<?> updateInfo(@RequestBody UserInfo userInfo, HttpServletRequest request) {
         userService.updateUser(userInfo);
-        System.out.println(userInfo.toString());
+        LOGGER.info(userInfo.toString());
         HttpSession session = request.getSession();
         UserDTO userDto = (UserDTO) session.getAttribute("user");
         userDto.setUserInfo(userInfo);
