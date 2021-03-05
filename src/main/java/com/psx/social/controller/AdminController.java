@@ -155,6 +155,13 @@ public class AdminController {
         return new ReturnT<>(Constants.SUCCESS, questionService.getAvailableQuestions());
     }
 
+    @ApiOperation("根据问卷id获取问卷详情")
+    @RequestMapping(value = "getQuestionsDetail", method = RequestMethod.GET)
+    @ResponseBody
+    public ReturnT<?> getQuestionsDetail(Integer qId) {
+        return new ReturnT<>(Constants.SUCCESS, questionService.getQuestionsById(qId));
+    }
+
     @ApiOperation("删除问卷,available 置 0")
     @RequestMapping(value = "deleteQuestions", method = RequestMethod.POST)
     @ResponseBody
@@ -164,20 +171,29 @@ public class AdminController {
     }
 
     // 创建新的问卷
-    @ApiOperation("创建新的问卷,res是答题后分析结果评级ABCD对应的四条详情,questionUrl置空")
-    @RequestMapping(value = "addQuestions", method = RequestMethod.POST)
+    @ApiOperation("创建新的问卷")
+    @RequestMapping(value = "addQuestionPage", method = RequestMethod.POST)
     @ResponseBody
-    public ReturnT<?> addQuestionPage(@RequestBody AddQuestionDTO addQuestionDTO) {
-        return questionService.addNewQuestions(addQuestionDTO.getQuestionList(), addQuestionDTO.getRes());
+    public ReturnT<?> addQuestionPage(@RequestBody QuestionPage questionPage) {
+        return questionService.addQuestionPage(questionPage);
     }
 
-    // 更新问卷
-    @ApiOperation("QuestionUrl是通过查询可用问卷获取到的")
-    @RequestMapping(value = "updateQuestions", method = RequestMethod.POST)
+    // 添加新题目
+    @ApiOperation("添加新题目=等同于更新题库")
+    @RequestMapping(value = "addQuestion", method = RequestMethod.POST)
     @ResponseBody
-    public ReturnT<?> updateQuestions(@RequestBody AddQuestionDTO addQuestionDTO) {
-        return questionService.updateQuestions(addQuestionDTO);
+    public ReturnT<?> updateQuestions(@RequestBody Question question) {
+        return questionService.addNewQuestion(question);
     }
 
+    @ApiOperation("查询题库内容")
+    @RequestMapping(value = "getAllQuestions", method = RequestMethod.GET)//查询所有
+    @ResponseBody
+    public ReturnT<?> getAllQuestions(@RequestParam(required = false) int index,
+                                      @RequestParam(required = false) int perPage) {
+        PageHelper.startPage(index, perPage);
+        List<Question> questions = questionService.showQuestion();
+        return PageUtil.getPageResult(new PageInfo<>(questions));
+    }
 
 }

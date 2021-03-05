@@ -1,6 +1,7 @@
 package com.psx.social.dao;
 
 
+import com.psx.social.entity.Question;
 import com.psx.social.entity.QuestionPage;
 import com.psx.social.entity.UserQuestion;
 import org.apache.ibatis.annotations.Insert;
@@ -14,19 +15,22 @@ import java.util.List;
 public interface QuestionMapper {
 
     @Select("select * from QuestionPage where available=${1}")
-    List<QuestionPage> questionList();
+    List<QuestionPage> questionPages();
 
-    @Insert("insert into QuestionPage(pageUrl,pageName,available) values (#{pageUrl},#{pageName},${1})")
+    @Select("select * from Question")
+    List<Question> questionList();
+
+    @Insert("insert into QuestionPage(questionList,pageName,available) values (#{questionList},#{pageName},${1})")
     int insert(QuestionPage questionPage);
 
-    @Update("update psx.QuestionPage set available = #{available}")
+    @Update("update QuestionPage set available = #{available}")
     int update(QuestionPage questionPage);
 
-    @Insert("insert into UserQuestion(user_account,question_url,res_url) " +
-            "values(#{user_account},#{question_url},#{res_url})")
+    @Insert("insert into UserQuestion(user_account,questionId) " +
+            " values (#{user_account},#{questionId})")
     int insertUserQuestion(UserQuestion userQuestion);
 
-    @Update("update psx.UserQuestion set question_url=#{question_url} where user_account=#{user_account}")
+    @Update("update UserQuestion set questionId=#{questionId} where user_account=#{user_account}")
     int updateUserQuestion(UserQuestion userQuestion);
 
     @Select("select * from UserQuestion where user_account=#{account}")
@@ -34,4 +38,19 @@ public interface QuestionMapper {
 
     @Select("select count(*) from QuestionPage")
     int countPage();
+
+    @Insert("insert into Question(title,answer1,answer2,answer3) values(#{title},#{answer1},#{answer2},#{answer3})")
+    int addQuestion(Question question);
+
+    @Select("select * from Question where id = #{id}")
+    Question getQuestion(Integer id);
+
+    @Select("select * from QuestionPage where id = #{id}")
+    QuestionPage getQuestionPageById(Integer id);
+
+    @Select("select * from QuestionPage where pageName = #{pageName}")
+    QuestionPage getQuestionPageByName(String pageName);
+
+    @Select("select * from QuestionPage where questionList = #{list}")
+    QuestionPage getQuestionPageByList(String list);
 }

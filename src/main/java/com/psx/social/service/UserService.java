@@ -32,7 +32,7 @@ public interface UserService {
     UserMore findUserMore(String account);
 
     // 计算分数
-    UserMore addScores(String account, List<ReturnAnswer> list);
+    UserMore addScores(String account, Integer score);
 
     ResultMsg returnResult(String account);
 

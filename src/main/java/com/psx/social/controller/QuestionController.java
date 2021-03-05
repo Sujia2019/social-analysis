@@ -51,12 +51,12 @@ public class QuestionController {
     @ApiOperation("题目完成后保存答案")
     @RequestMapping(value = "sendAnswers", method = RequestMethod.POST)
     @ResponseBody
-    public ReturnT<?> Answers(HttpServletRequest request, @RequestBody List<ReturnAnswer> answersList) {
-        UserDTO userDTO = ((UserDTO) request.getSession().getAttribute("User"));
+    public ReturnT<?> Answers(@RequestBody int score, HttpServletRequest request) {
+        UserDTO userDTO = ((UserDTO) request.getSession().getAttribute("user"));
         if (userDTO != null) {
             String account = userDTO.getUserInfo().getUser_account();
             HttpSession session = request.getSession();
-            UserMore userMore = userService.addScores(account, answersList);
+            UserMore userMore = userService.addScores(account, score);
             userDTO.setUserMore(userMore);
             session.setAttribute("User", userDTO);
             LOGGER.info("保存用户【{}】的更多信息【{}】至session中...", account, userMore.toString());

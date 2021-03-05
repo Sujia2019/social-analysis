@@ -3,7 +3,6 @@ package com.psx.social.service;
 import com.psx.social.dao.*;
 import com.psx.social.entity.*;
 import com.psx.social.util.Constants;
-import com.psx.social.util.LoadTxt;
 import com.psx.social.util.ReturnT;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
@@ -174,11 +173,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserMore addScores(String account, List<ReturnAnswer> list) {
-        int scores = 0;
-        for (ReturnAnswer returnAnswer : list) {
-            scores += returnAnswer.getScore();
-        }
+    public UserMore addScores(String account, Integer scores) {
         userMoreMapper.setScore(account,scores);
         return userMoreMapper.findByAccount(account);
     }
@@ -186,22 +181,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResultMsg returnResult(String account) {
         int scores = userMoreMapper.findScoreByAccount(account);
-        String url = questionMapper.findUserQuestion(account).getRes_url();
+        ResultMsg res = new ResultMsg();
         String rate;
         if(scores>=48){
             rate="A";
+            res.setDetail(Constants.A);
         }else if(scores>=37){
             rate="B";
+            res.setDetail(Constants.B);
         }else if(scores>=27){
             rate="C";
+            res.setDetail(Constants.C);
         }else {
             rate="D";
+            res.setDetail(Constants.D);
         }
-        ResultMsg res = new ResultMsg();
         res.setUser_account(account);
         res.setRate(rate);
         res.setScore(scores);
-        res.setDetail(LoadTxt.sendResult(rate, url));
         return res;
     }
 

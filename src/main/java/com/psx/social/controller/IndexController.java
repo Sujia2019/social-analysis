@@ -11,6 +11,8 @@ import com.psx.social.util.Verify;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.util.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,7 @@ import javax.servlet.http.HttpSession;
 @RestController
 @RequestMapping("/")
 public class IndexController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(IndexController.class);
     @Autowired
     UserService userService;
     @Autowired
@@ -44,6 +47,7 @@ public class IndexController {
             userDTO = (UserDTO) session.getAttribute("user");
             if (userDTO.getUser_account().equals(userBase.getUser_account()))
                 // 将缓存对象直接返回
+                LOGGER.info(">>>>>>登录用户：{}", userDTO);
                 return new ReturnT<>(Constants.SUCCESS, Constants.SUCCESS_MSG, userDTO);
         }
         // 走业务层查库
@@ -54,6 +58,7 @@ public class IndexController {
         } else {
             returnT = new ReturnT<>(Constants.FAIL, "账号或密码错误，登录失败");
         }
+        LOGGER.info(">>>>>>登录用户：{}", userDTO);
         return returnT;
     }
 

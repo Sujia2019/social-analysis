@@ -1,6 +1,5 @@
 package com.psx.social.service;
 
-import com.psx.social.entity.AddQuestionDTO;
 import com.psx.social.entity.AnalyzingData;
 import com.psx.social.entity.Question;
 import com.psx.social.entity.QuestionPage;
@@ -9,9 +8,11 @@ import com.psx.social.util.ReturnT;
 import java.util.List;
 
 public interface QuestionService {
-    List<Question> showQuestion(int curr, int pageSize);
+    List<Question> showQuestion();
 
     List<Question> showQuestion(String account);
+
+    List<Question> getQuestionsById(Integer qId);
 
     // 所有已完成答题的数目
     int findAllFinished();
@@ -22,14 +23,17 @@ public interface QuestionService {
     // 答题结果分析
     AnalyzingData analyzingRes();
 
-    // 添加调查问卷
-    ReturnT<?> addNewQuestions(List<Question> questions, List<String> res);
+    // 添加题目
+    ReturnT<?> addNewQuestion(Question question);
 
     void delete(QuestionPage questionPage);
 
     List<QuestionPage> getAvailableQuestions();
 
-    // 更新问卷
-    ReturnT<?> updateQuestions(AddQuestionDTO addQuestionDTO);
+    // 添加问卷
+    ReturnT<?> addQuestionPage(QuestionPage questionPage);
+
+
+
 
 }
