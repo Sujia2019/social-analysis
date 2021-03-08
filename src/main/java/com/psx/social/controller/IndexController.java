@@ -45,6 +45,7 @@ public class IndexController {
         if (session.getAttribute("user") != null) {
             // 说明已经登陆，session中有缓存，不必再次登录
             userDTO = (UserDTO) session.getAttribute("user");
+            // 如果此次登录用户为上个用户
             if (userDTO.getUser_account().equals(userBase.getUser_account()))
                 // 将缓存对象直接返回
                 LOGGER.info(">>>>>>登录用户：{}", userDTO);
@@ -103,5 +104,16 @@ public class IndexController {
             return new ReturnT<>(Constants.FAIL, "此账号已存在");
         }
         return new ReturnT<>(Constants.SUCCESS, "恭喜，此账号可以使用");
+    }
+
+    @ApiOperation("注销")
+    @RequestMapping(value = "logout", method = RequestMethod.POST)
+    @ResponseBody
+    public ReturnT<?> logout(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("user") != null) {
+            session.removeAttribute("user");
+        }
+        return new ReturnT<>(Constants.SUCCESS, "注销成功");
     }
 }

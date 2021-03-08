@@ -27,7 +27,7 @@ public class ChatListener {
             StringBuilder str = new StringBuilder("");
             String indexLine = "";
             while ((indexLine = br.readLine()) != null) {
-                str.append(indexLine);
+                str.append(indexLine).append("\r\n");
             }
             return str.toString();
         } catch (IOException e) {
