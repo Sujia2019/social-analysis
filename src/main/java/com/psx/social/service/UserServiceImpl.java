@@ -175,6 +175,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserMore addScores(String account, Integer scores) {
         userMoreMapper.setScore(account,scores);
+        userMoreMapper.updateFinished(account);
         return userMoreMapper.findByAccount(account);
     }
 

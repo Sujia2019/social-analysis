@@ -38,4 +38,7 @@ public interface UserMoreMapper {
     int findAllCount();
     @Select("select scores from UserMore where isFinishedQ=1")
     List<Integer> findScore();
+
+    @Update("update  psx_db.UserMore SET isFinishedQ=${1} where user_account=#{account}")
+    int updateFinished(String account);
 }
