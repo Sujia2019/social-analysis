@@ -46,10 +46,11 @@ public class IndexController {
             // 说明已经登陆，session中有缓存，不必再次登录
             userDTO = (UserDTO) session.getAttribute("user");
             // 如果此次登录用户为上个用户
-            if (userDTO.getUser_account().equals(userBase.getUser_account()))
+            if (userDTO.getUser_account().equals(userBase.getUser_account())) {
                 // 将缓存对象直接返回
                 LOGGER.info(">>>>>>登录用户：{}", userDTO);
                 return new ReturnT<>(Constants.SUCCESS, Constants.SUCCESS_MSG, userDTO);
+            }
         }
         // 走业务层查库
         userDTO = userService.doLogin(userBase);

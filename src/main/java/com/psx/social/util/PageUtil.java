@@ -1,7 +1,6 @@
 package com.psx.social.util;
 
 import com.github.pagehelper.PageInfo;
-import com.psx.social.entity.PageRequest;
 
 import java.util.List;
 

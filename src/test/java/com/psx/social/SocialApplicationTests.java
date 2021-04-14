@@ -110,11 +110,11 @@ class SocialApplicationTests {
     @Test
     public void settings() {
         Settings settings = new Settings();
-        settings.setUser_account("test");
-        settings.setReceive_board(true);
-        settings.setReceive_friend(true);
-        settings.setSend_notice(true);
-        settings.setShow_board(true);
+        settings.setUser_account("test11");
+        settings.setReceive_board(false);
+        settings.setReceive_friend(false);
+        settings.setSend_notice(false);
+        settings.setShow_board(false);
         settingsMapper.update(settings);
     }
 
@@ -131,4 +131,6 @@ class SocialApplicationTests {
     public void getFriends() {
         System.out.println(friendMapper.friendList("test"));
     }
+
+
 }

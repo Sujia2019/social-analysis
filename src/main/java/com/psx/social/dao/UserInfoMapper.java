@@ -65,7 +65,7 @@ public interface UserInfoMapper {
             "            <if test=\"null !=collage\">" +
             "                and collage like concat('%',#{collage},'%')"+
             "            </if>" +
-            "            <if test=\"null != null\">" +
+            "            <if test=\"null != gender\">" +
             "                and gender=#{gender}" +
             "            </if>" +
             "        </where>"
