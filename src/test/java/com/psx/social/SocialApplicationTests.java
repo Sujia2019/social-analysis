@@ -1,5 +1,6 @@
 package com.psx.social;
 
+import com.aliyuncs.exceptions.ClientException;
 import com.psx.social.controller.IndexController;
 import com.psx.social.dao.ChatRoomMapper;
 import com.psx.social.dao.FriendMapper;
@@ -8,6 +9,7 @@ import com.psx.social.dao.UserBaseMapper;
 import com.psx.social.entity.*;
 import com.psx.social.service.UserService;
 import com.psx.social.util.MailConfig;
+import com.psx.social.util.NLPUtil;
 import com.psx.social.util.ReturnT;
 import com.psx.social.util.Verify;
 import org.junit.jupiter.api.Test;
@@ -150,5 +152,10 @@ class SocialApplicationTests {
         System.out.println(chatRoom);
         System.out.println(time);
         System.out.println(activity);
+    }
+
+    @Test
+    public void analyzing() throws ClientException {
+        NLPUtil.getData("你好你好你好！");
     }
 }

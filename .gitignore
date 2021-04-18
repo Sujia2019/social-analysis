@@ -35,3 +35,5 @@ build/
 ### Private Information ###
 src/main/resources/application.properties
 src/main/java/com/psx/social/util/Verify.java
+src/main/java/com/psx/social/util/NLPUtil.java
+

@@ -244,9 +244,9 @@ public class UserServiceImpl implements UserService {
             res.setNegative(chatRoom.getNegative());
             double pos = chatRoom.getPositive_prob();
             // 日常交流
-            if (pos >= 0.9) {
+            if (pos >= 0.85) {
                 res.setDailyDetail(Constants.CHAT_A);
-            } else if (pos >= 0.75) {
+            } else if (pos >= 0.70) {
                 res.setDailyDetail(Constants.CHAT_B);
             } else if (pos >= 0.5) {
                 res.setDailyDetail(Constants.CHAT_C);
