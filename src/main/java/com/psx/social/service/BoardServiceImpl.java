@@ -36,7 +36,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public boolean addBoardMsg(BoardMsg msg) {
-        String account = msg.getUser_account();
+        String account = msg.getUser_account(); // 目标用户账号
         // 如果允许接受陌生留言留言在关闭状态下
         if (!settingsMapper.findByAccount(account).isReceive_board()) {
             String from = msg.getFrom_account();

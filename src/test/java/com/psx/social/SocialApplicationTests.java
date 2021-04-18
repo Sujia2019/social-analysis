@@ -1,6 +1,7 @@
 package com.psx.social;
 
 import com.psx.social.controller.IndexController;
+import com.psx.social.dao.ChatRoomMapper;
 import com.psx.social.dao.FriendMapper;
 import com.psx.social.dao.SettingsMapper;
 import com.psx.social.dao.UserBaseMapper;
@@ -15,6 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.sql.Timestamp;
 
 @SpringBootTest
 class SocialApplicationTests {
@@ -38,6 +41,8 @@ class SocialApplicationTests {
     SettingsMapper settingsMapper;
     @Autowired
     MailConfig mailConfig;
+    @Autowired
+    ChatRoomMapper chatRoomMapper;
 
     @Test
     public void doLogin() {
@@ -87,13 +92,13 @@ class SocialApplicationTests {
 
     @Test
     public void delete() {
-        userService.delUser("2");
+        userService.delUser("test44");
     }
 
-//    @Test
-//    public void verifyCode() {
-//        verify.sendCode("18539403150");
-//    }
+    @Test
+    public void verifyCode() {
+        verify.sendCode("18539403150");
+    }
 
     @Test
     public void log() {
@@ -133,4 +138,17 @@ class SocialApplicationTests {
     }
 
 
+    @Test
+    public void chat() {
+        ChatRoom chatRoom = chatRoomMapper.getChatInfo("test");
+        Timestamp t1 = chatRoom.getCreate_time();
+        Timestamp t2 = chatRoom.getLast_modify();
+        long time = t2.getTime() - t1.getTime();
+
+        long activity = chatRoom.getMsg_count() * 86400000L / time;
+
+        System.out.println(chatRoom);
+        System.out.println(time);
+        System.out.println(activity);
+    }
 }

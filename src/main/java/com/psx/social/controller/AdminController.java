@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 @Api("管理端")
 @RestController
 @RequestMapping("/admin")
+@Transactional
 public class AdminController {
     private static final Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
     @Autowired
@@ -105,7 +107,8 @@ public class AdminController {
     @ApiOperation("根据账号删除")
     @RequestMapping(value = "delete", method = RequestMethod.POST)
     @ResponseBody
-    public ReturnT<?> delete(@RequestParam String account) {
+    public ReturnT<?> delete(@RequestBody String account) {
+        LOGGER.info("即将删除的账号为：{}", account);
         if (userService.delUser(account))
             return new ReturnT<>(Constants.SUCCESS, "删除成功");
         else {

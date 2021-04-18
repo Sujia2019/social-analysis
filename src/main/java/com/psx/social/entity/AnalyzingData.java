@@ -19,4 +19,8 @@ public class AnalyzingData implements Serializable {
     private double percentB;
     private double percentC;
     private double percentD;
+    private int activeA;
+    private int activeB;
+    private int activeC;
+    private int activeD;
 }

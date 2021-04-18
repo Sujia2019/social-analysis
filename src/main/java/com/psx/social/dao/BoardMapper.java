@@ -26,4 +26,7 @@ public interface BoardMapper {
     int historyMsgCount(String account);
     @Update("update UserMore set msgCount=#{count} where user_account=#{account}")
     int setHistoryMsgCount(Tips tips);
+
+    @Select("select user_account from BoardMsg where from_account=#{account}")
+    List<String> getBoardUsers(String account);
 }

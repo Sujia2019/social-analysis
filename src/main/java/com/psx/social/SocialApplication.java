@@ -13,7 +13,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 @EnableScheduling
 @SpringBootApplication
 @EnableCaching
-@EnableWebSocket
+//@EnableWebSocket
 @MapperScan("com.psx.social.dao")
 public class SocialApplication extends SpringBootServletInitializer {
 

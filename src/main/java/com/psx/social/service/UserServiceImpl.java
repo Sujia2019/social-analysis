@@ -10,7 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.apache.commons.codec.digest.DigestUtils;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +35,11 @@ public class UserServiceImpl implements UserService {
     SettingsMapper settingsMapper;
     @Autowired
     QuestionMapper questionMapper;
+
+    @Autowired
+    ChatRoomMapper chatRoomMapper;
+    @Autowired
+    BoardMapper boardMapper;
 
 
     @Override
@@ -119,12 +128,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean delUser(String account) {
-        userBaseMapper.delete(account);
-        userInfoMapper.delete(account);
-        // TODO 删除好友关系
-        userMoreMapper.delete(account);
-        settingsMapper.delete(account);
-        return true;
+        try {
+            LOGGER.info("删除基础账号 {}", userBaseMapper.delete(account));
+            LOGGER.info("删除详细信息 {}", userInfoMapper.delete(account));
+            LOGGER.info("删除用户其他信息 {}", userMoreMapper.delete(account));
+            LOGGER.info("删除设置权限 {}", settingsMapper.delete(account));
+//            userInfoMapper.delete(account);
+//            // TODO 删除好友关系
+//            userMoreMapper.delete(account);
+//            settingsMapper.delete(account);
+            return true;
+        } catch (Exception e) {
+            LOGGER.error("删除用户发生错误,{}", e.getMessage());
+            return false;
+        }
+
+
     }
 
     @Override
@@ -197,6 +216,50 @@ public class UserServiceImpl implements UserService {
             rate="D";
             res.setDetail(Constants.D);
         }
+        int friendCounts = friendMapper.countFriends(account);
+        // 好友数
+        res.setFriendCount(friendCounts);
+        // 好友数对应评级
+        if (friendCounts >= 150) {
+            res.setFriendDetail(Constants.FRIEND_A);
+        } else if (friendCounts >= 50) {
+            res.setFriendDetail(Constants.FRIEND_B);
+        } else if (friendCounts >= 5) {
+            res.setFriendDetail(Constants.FRIEND_C);
+        } else {
+            res.setFriendDetail(Constants.FRIEND_D);
+        }
+        ChatRoom chatRoom = chatRoomMapper.getChatInfo(account);
+        if (chatRoom != null) {
+            long active = chatRoom.getActivity_index();
+            // 聊天活跃度
+            res.setActive(active);
+            // 活跃度排名
+            res.setActiveRank(chatRoomMapper.getRank(account));
+            // 发送信息数
+            res.setMsgCount(chatRoom.getMsg_count());
+            // 正面信息数
+            res.setPositive(chatRoom.getPositive());
+            // 负面信息数
+            res.setNegative(chatRoom.getNegative());
+            double pos = chatRoom.getPositive_prob();
+            // 日常交流
+            if (pos >= 0.9) {
+                res.setDailyDetail(Constants.CHAT_A);
+            } else if (pos >= 0.75) {
+                res.setDailyDetail(Constants.CHAT_B);
+            } else if (pos >= 0.5) {
+                res.setDailyDetail(Constants.CHAT_C);
+            } else {
+                res.setDailyDetail(Constants.CHAT_D);
+            }
+
+            List<String> users = boardMapper.getBoardUsers(account);
+            String user = getMaxFrequency(users);
+            UserInfo userInfo = userInfoMapper.findUserByAccount(user);
+            // 留言文案
+            res.setBoardDetail("访问" + userInfo.getSname() + "(" + user + ")的空间，字里行间都是与他/她的深情厚谊");
+        }
         res.setUser_account(account);
         res.setRate(rate);
         res.setScore(scores);
@@ -243,5 +306,20 @@ public class UserServiceImpl implements UserService {
     private boolean isEmail(String input) {
         String reg = "^([a-z0-9A-Z]+[-|_|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
         return Pattern.matches(reg, input);
+    }
+
+    // 获取出现频率最多的那个人
+    private String getMaxFrequency(List<String> list) {
+        Map<String, Integer> map = new HashMap<>();
+
+        for (String temp : list) {
+            Integer count = map.get(temp);
+            map.put(temp, (count == null) ? 1 : count + 1);
+        }
+        Map<String, Integer> treeMap = new TreeMap<>(map);
+        for (Map.Entry entry : treeMap.entrySet()) {
+            return entry.getKey().toString();
+        }
+        return "暂无";
     }
 }
