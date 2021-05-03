@@ -1,6 +1,8 @@
 package com.psx.social;
 
 import com.aliyuncs.exceptions.ClientException;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.psx.social.controller.IndexController;
 import com.psx.social.dao.ChatRoomMapper;
 import com.psx.social.dao.FriendMapper;
@@ -10,10 +12,8 @@ import com.psx.social.entity.*;
 import com.psx.social.service.UserService;
 import com.psx.social.util.MailConfig;
 import com.psx.social.util.NLPUtil;
-import com.psx.social.util.ReturnT;
 import com.psx.social.util.Verify;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -157,5 +157,36 @@ class SocialApplicationTests {
     @Test
     public void analyzing() throws ClientException {
         NLPUtil.getData("你好你好你好！");
+    }
+
+    @Test
+    public void insertChatRoom() {
+        ChatRoom chatRoom = new ChatRoom();
+        chatRoom.setActivity_index(100);
+        chatRoom.setMsg_count(1);
+        chatRoom.setUser_account("test11");
+        chatRoomMapper.insertChatRoom(chatRoom);
+    }
+
+    @Test
+    public void analyzeJson() throws ClientException {
+        JsonParser parser = new JsonParser();
+        String data = NLPUtil.getData("今天是个好天气");
+        // 解析JSON
+        JsonObject dataJson = parser.parse(data).getAsJsonObject();
+        JsonObject result = dataJson.get("result").getAsJsonObject();
+        double positive_prob = result.get("positive_prob").getAsDouble();
+        double negative_prob = result.get("negative_prob").getAsDouble();
+        double neutral_prob = result.get("neutral_prob").getAsDouble();
+        String sentiment = result.get("sentiment").getAsString();
+        System.out.println(positive_prob);
+        System.out.println(negative_prob);
+        System.out.println(neutral_prob);
+        System.out.println(sentiment);
+    }
+
+    @Test
+    public void getRank() {
+        System.out.println(chatRoomMapper.getRank("test11"));
     }
 }

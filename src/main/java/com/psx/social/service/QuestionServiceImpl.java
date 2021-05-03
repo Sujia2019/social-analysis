@@ -1,10 +1,17 @@
 package com.psx.social.service;
 
+import com.aliyuncs.exceptions.ClientException;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.psx.social.dao.ChatRoomMapper;
 import com.psx.social.dao.QuestionMapper;
 import com.psx.social.dao.UserMoreMapper;
 import com.psx.social.entity.*;
 import com.psx.social.util.Constants;
+import com.psx.social.util.NLPUtil;
 import com.psx.social.util.ReturnT;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +25,10 @@ public class QuestionServiceImpl implements QuestionService{
     QuestionMapper questionMapper;
     @Autowired
     UserMoreMapper userMoreMapper;
+    @Autowired
+    ChatRoomMapper chatRoomMapper;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(QuestionServiceImpl.class);
 
     @Override
     public List<Question> showQuestion() {
@@ -107,6 +118,12 @@ public class QuestionServiceImpl implements QuestionService{
         data.setPercentB(percent(countB, finishedCount));
         data.setPercentC(percent(countC, finishedCount));
         data.setPercentD(percent(countD, finishedCount));
+        data.setActiveA(chatRoomMapper.countActivityA());
+        data.setActiveB(chatRoomMapper.countActivityB());
+        data.setActiveC(chatRoomMapper.countActivityC());
+        data.setActiveD(chatRoomMapper.countActivityD());
+        data.setActiveE(chatRoomMapper.countActivityE());
+
         return data;
     }
 
@@ -135,6 +152,90 @@ public class QuestionServiceImpl implements QuestionService{
         }
         return new ReturnT<>(Constants.FAIL, "更新失败，名字重复", questionMapper.insert(questionPage));
     }
+
+    @Override
+    public void doAnalyze(String message) {
+        JsonParser parser = new JsonParser();
+        JsonObject jsonObject = parser.parse(message).getAsJsonObject();
+        String userAccount = jsonObject.get("userName").getAsString();
+        String msg = jsonObject.get("msg").getAsString();
+        LOGGER.info("userAccount:{},msg:{}", userAccount, msg);
+        ChatRoom chatRoom;
+        if (chatRoomMapper.getChatNumber(userAccount) == 0) {
+            chatRoom = new ChatRoom();
+            chatRoom.setActivity_index(100);
+            chatRoom.setMsg_count(1);
+            chatRoom.setUser_account(userAccount);
+            try {
+                String data = NLPUtil.getData(msg);
+                // 解析JSON
+                JsonObject dataJson = parser.parse(data).getAsJsonObject();
+                JsonObject result = dataJson.get("result").getAsJsonObject();
+                double positive_prob = result.get("positive_prob").getAsDouble();
+                double negative_prob = result.get("negative_prob").getAsDouble();
+                double neutral_prob = result.get("neutral_prob").getAsDouble();
+                String sentiment = result.get("sentiment").getAsString();
+                if (sentiment.equals("负面")) {
+                    long negative = chatRoom.getNegative() + 1L;
+                    chatRoom.setNegative(negative);
+                } else {
+                    long positive = chatRoom.getPositive() + 1L;
+                    chatRoom.setPositive(positive);
+                }
+                chatRoom.setPositive_prob(positive_prob);
+                chatRoom.setNegative_prob(negative_prob);
+                chatRoom.setNeutral_prob(neutral_prob);
+            } catch (ClientException e) {
+                e.printStackTrace();
+            }
+            chatRoomMapper.insertChatRoom(chatRoom);
+        } else {
+            chatRoom = chatRoomMapper.getChatInfo(userAccount);
+
+            long msgCount = chatRoom.getMsg_count() + 1L;
+            chatRoom.setMsg_count(msgCount);
+            long last = chatRoom.getCreate_time().getTime();
+            long now = System.currentTimeMillis();
+            // 计算活跃度 条数/时间
+            long activity_index = msgCount * Constants.DAY / (now - last);
+            chatRoom.setActivity_index(activity_index);
+            // 调用情感分析API
+            try {
+                String data = NLPUtil.getData(msg);
+                // 解析JSON
+                JsonObject dataJson = parser.parse(data).getAsJsonObject();
+                JsonObject result = dataJson.get("result").getAsJsonObject();
+                double positive_prob = result.get("positive_prob").getAsDouble();
+                double negative_prob = result.get("negative_prob").getAsDouble();
+                double neutral_prob = result.get("neutral_prob").getAsDouble();
+                String sentiment = result.get("sentiment").getAsString();
+                if (sentiment.equals("负面")) {
+                    long negative = chatRoom.getNegative() + 1L;
+                    chatRoom.setNegative(negative);
+                } else {
+                    long positive = chatRoom.getPositive() + 1L;
+                    chatRoom.setPositive(positive);
+                }
+
+                double last_positive = chatRoom.getPositive_prob();
+                double last_negative = chatRoom.getNegative();
+                double last_neutral = chatRoom.getNeutral_prob();
+                positive_prob = (positive_prob + last_positive) / msgCount;
+                negative_prob = (negative_prob + last_negative) / msgCount;
+                neutral_prob = (neutral_prob + last_neutral) / msgCount;
+                chatRoom.setPositive_prob(positive_prob);
+                chatRoom.setNegative_prob(negative_prob);
+                chatRoom.setNeutral_prob(neutral_prob);
+                // 更新
+                chatRoomMapper.update(chatRoom);
+            } catch (ClientException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
 
     private List<Question> getQuestions(QuestionPage questionPage) {
         String qs = questionPage.getQuestionList();

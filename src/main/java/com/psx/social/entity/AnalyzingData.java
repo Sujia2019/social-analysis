@@ -1,6 +1,7 @@
 package com.psx.social.entity;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -19,8 +20,14 @@ public class AnalyzingData implements Serializable {
     private double percentB;
     private double percentC;
     private double percentD;
+    @ApiModelProperty(">= 20000")
     private int activeA;
+    @ApiModelProperty(">= 12000 & < 20000")
     private int activeB;
+    @ApiModelProperty(">= 6000 & < 12000")
     private int activeC;
+    @ApiModelProperty(">= 2000 & < 6000")
     private int activeD;
+    @ApiModelProperty(">= 0 & < 2000")
+    private int activeE;
 }

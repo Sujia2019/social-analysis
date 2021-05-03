@@ -29,4 +29,5 @@ public interface BoardMapper {
 
     @Select("select user_account from BoardMsg where from_account=#{account}")
     List<String> getBoardUsers(String account);
+
 }

@@ -34,6 +34,7 @@ public interface QuestionService {
     ReturnT<?> addQuestionPage(QuestionPage questionPage);
 
 
+    void doAnalyze(String msg);
 
 
 }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ChatRoomMapper {
 
-    @Insert("insert into ChatRoom(user_account,msg_count,create_time,last_modify,activity_index,positive,negative，positive_prob,negative_prob,neutral_prob)" +
+    @Insert("insert into ChatRoom(user_account,msg_count,create_time,last_modify,activity_index,positive,negative,positive_prob,negative_prob,neutral_prob)" +
             "values(#{user_account},#{msg_count},now(),now(),#{activity_index},#{positive},#{negative},#{positive_prob},#{negative_prob},#{neutral_prob})")
     void insertChatRoom(ChatRoom chat);
 
@@ -24,9 +24,24 @@ public interface ChatRoomMapper {
             "where user_account=#{user_account}")
     int update(ChatRoom chat);
 
-    @Select("select (@rowNum:=@rowNum+1) as rowNo" +
-            "from ChatRoom," +
-            "(select (@rowNum :=0) ) b" +
-            "order by ChatRoom.activity_index desc ")
-    int getRank(String account);
+    @Select("select u.r from (" +
+            "select user_account,(@ranknum:=@ranknum+1) as r from ChatRoom,(select (@ranknum :=0)) b order by activity_index desc)" +
+            " u where u.user_account=#{user_account}")
+    int getRank(String user_account);
+
+
+    @Select("select count(*) from ChatRoom where activity_index >= 20000")
+    int countActivityA();
+
+    @Select("select count(*) from ChatRoom where activity_index >= 12000 and activity_index < 20000")
+    int countActivityB();
+
+    @Select("select count(*) from ChatRoom where activity_index >= 6000 and activity_index < 12000")
+    int countActivityC();
+
+    @Select("select count(*) from ChatRoom where activity_index >= 2000 and activity_index < 6000")
+    int countActivityD();
+
+    @Select("select count(*) from ChatRoom where activity_index >= 0 and activity_index < 2000")
+    int countActivityE();
 }

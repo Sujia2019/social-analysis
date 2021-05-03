@@ -1,0 +1,1 @@
+.result_div{padding-left:30px;line-height:50px;position:relative;transform:translateX(0);-webkit-animation:mymove 5s 1;animation:mymove 5s 1}.result_div span{color:#4b67aa;font-weight:700}@-webkit-keyframes mymove{0%{transform:translateX(-500px)}to{transform:translateX(0)}}@keyframes mymove{0%{transform:translateX(-500px)}to{transform:translateX(0)}}

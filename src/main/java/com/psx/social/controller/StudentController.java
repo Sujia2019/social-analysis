@@ -1,4 +1,6 @@
 package com.psx.social.controller;
+
+import com.aliyuncs.exceptions.ClientException;
 import com.psx.social.entity.UserBase;
 import com.psx.social.entity.UserDTO;
 import com.psx.social.entity.UserInfo;
@@ -7,6 +9,7 @@ import com.psx.social.service.FriendService;
 import com.psx.social.service.SettingService;
 import com.psx.social.service.UserService;
 import com.psx.social.util.Constants;
+import com.psx.social.util.NLPUtil;
 import com.psx.social.util.ReturnT;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -95,6 +98,17 @@ public class StudentController {
     @ResponseBody
     public ReturnT<?> getByAccount(String account) {
         return new ReturnT<>(Constants.SUCCESS, Constants.SUCCESS_MSG, userService.findUserByAccount(account));
+    }
+
+    @ApiOperation("情感分析API")
+    @RequestMapping(value = "sentimentAnalysis", method = RequestMethod.POST)
+    @ResponseBody
+    public ReturnT<?> sentimentAnalysis(@RequestBody String text) {
+        try {
+            return new ReturnT<>(Constants.SUCCESS, NLPUtil.getData(text));
+        } catch (ClientException e) {
+            return new ReturnT<>(Constants.FAIL, "调用失败");
+        }
     }
 
 }

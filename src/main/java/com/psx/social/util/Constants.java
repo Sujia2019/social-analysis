@@ -18,8 +18,9 @@ public class Constants {
 
     public static final String FRIEND_A = "交友甚多，眼界开阔";
     public static final String FRIEND_B = "很受欢迎，喜好交友";
-    public static final String FRIEND_C = "知交甚少，寡言少语";
-    public static final String FRIEND_D = "不善交友，形单影只";
+    public static final String FRIEND_C = "好友较多，圈子不大";
+    public static final String FRIEND_D = "虽然朋友甚少，但是山河不在重，重在遇知己、";
+    public static final String FRIEND_ZERO = "还没有好友噢～，你可以去添加一些好友～";
 
     public static final String BOARD_A = "访问xxx的空间，字里行间都是与他/她的深情厚谊";
     public static final String BOARD_B = "与他人互动，留言中常有您的影子";

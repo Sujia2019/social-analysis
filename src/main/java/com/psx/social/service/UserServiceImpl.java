@@ -224,10 +224,12 @@ public class UserServiceImpl implements UserService {
             res.setFriendDetail(Constants.FRIEND_A);
         } else if (friendCounts >= 50) {
             res.setFriendDetail(Constants.FRIEND_B);
-        } else if (friendCounts >= 5) {
+        } else if (friendCounts >= 20) {
             res.setFriendDetail(Constants.FRIEND_C);
-        } else {
+        } else if (friendCounts >= 1) {
             res.setFriendDetail(Constants.FRIEND_D);
+        } else if (friendCounts == 0) {
+            res.setFriendDetail(Constants.FRIEND_ZERO);
         }
         ChatRoom chatRoom = chatRoomMapper.getChatInfo(account);
         if (chatRoom != null) {
@@ -257,8 +259,9 @@ public class UserServiceImpl implements UserService {
             List<String> users = boardMapper.getBoardUsers(account);
             String user = getMaxFrequency(users);
             UserInfo userInfo = userInfoMapper.findUserByAccount(user);
+            int count = boardMapper.countBoardMsg(userInfo.getUser_account());
             // 留言文案
-            res.setBoardDetail("访问" + userInfo.getSname() + "(" + user + ")的空间，字里行间都是与他/她的深情厚谊");
+            res.setBoardDetail("访问" + userInfo.getSname() + "(" + user + ")的留言板，曾发送 " + count + " 条留言信息");
         }
         res.setUser_account(account);
         res.setRate(rate);
